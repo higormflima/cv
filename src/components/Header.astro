@@ -1,0 +1,31 @@
+---
+import { navigation } from '../data/navigation';
+import MobileNavigation from './MobileNavigation.astro';
+
+interface Props {
+  currentPath: string;
+  base: string;
+}
+
+const { currentPath, base } = Astro.props;
+const activePath = currentPath.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="wordmark" href={`${base}/`} aria-label="Higor Lima home">HL<span>.</span></a>
+    <MobileNavigation>
+      <ul>
+        {navigation.map((item) => {
+          const itemPath = item.href.replace(/\/$/, '') || '/';
+          const isActive = activePath === itemPath || (itemPath !== '/' && activePath.startsWith(`${itemPath}/`));
+          return (
+            <li>
+              <a href={`${base}${item.href}`} aria-current={isActive ? 'page' : undefined}>{item.label}</a>
+            </li>
+          );
+        })}
+      </ul>
+    </MobileNavigation>
+  </div>
+</header>

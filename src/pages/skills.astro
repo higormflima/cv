@@ -1,0 +1,21 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { skillGroups } from '../data/skills';
+---
+
+<SiteLayout title="Skills | Higor Lima" description="Skills and tools explicitly listed in Higor Lima's supplied CV.">
+  <section class="page-shell interior-page">
+    <p class="eyebrow"><span class="eyebrow-dot"></span> 03 · Skills</p>
+    <h1>Tools for clear<br /><em>thinking.</em></h1>
+    <p class="page-lead">Skills and tools explicitly named in the supplied CV.</p>
+    <div class="skills-grid">
+      {skillGroups.map((group, index) => (
+        <section class="skill-card">
+          <span class="card-number">{String(index + 1).padStart(2, '0')}</span>
+          <h2>{group.title}</h2>
+          <ul>{group.items.map((item) => <li>{item}</li>)}</ul>
+        </section>
+      ))}
+    </div>
+  </section>
+</SiteLayout>

@@ -1,0 +1,14 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<SiteLayout title="Page not found | Higor Lima" description="The page you are looking for could not be found.">
+  <section class="page-shell interior-page not-found">
+    <p class="eyebrow"><span class="eyebrow-dot"></span> 404 · Page not found</p>
+    <h1>This page<br /><em>isn't here.</em></h1>
+    <p class="page-lead">The page you are looking for may have moved or no longer exists.</p>
+    <a class="button button-primary" href={`${base}/`}>Back to home <span aria-hidden="true">↗</span></a>
+  </section>
+</SiteLayout>

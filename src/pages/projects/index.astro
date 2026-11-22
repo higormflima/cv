@@ -1,0 +1,24 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { profile } from '../../data/profile';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<SiteLayout title="Projects | Higor Lima" description="Projects by Higor Lima. Project information is being prepared for this page.">
+  <section class="page-shell interior-page">
+    <p class="eyebrow"><span class="eyebrow-dot"></span> 04 · Projects</p>
+    <h1>Ideas in<br /><em>the making.</em></h1>
+    <div class="placeholder-panel">
+      <span class="placeholder-label">Placeholder</span>
+      <h2>Project stories will go here.</h2>
+      <p>Placeholder: add project descriptions, your role, tools, outcomes, images, and links.</p>
+    </div>
+    <a class="featured-project" href={`${base}/projects/odyssey-mundana/`}>
+      <span class="eyebrow">Planned featured project</span>
+      <h2>Odyssey Mundana</h2>
+      <span class="featured-arrow" aria-hidden="true">↗</span>
+      <p>Placeholder: project details to be added.</p>
+    </a>
+  </section>
+</SiteLayout>

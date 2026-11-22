@@ -1,0 +1,16 @@
+:root {
+  color-scheme: light;
+  --paper: #f5f4ef;
+  --paper-deep: #eceae2;
+  --ink: #192521;
+  --ink-soft: #53625b;
+  --forest: #24483a;
+  --forest-dark: #18382d;
+  --lime: #d5e59a;
+  --line: #d4d4ca;
+  --white: #fffefa;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: 'Aptos', 'Segoe UI', sans-serif;
+  --content-width: 1160px;
+  --page-gutter: clamp(1.25rem, 5.5vw, 5rem);
+}
