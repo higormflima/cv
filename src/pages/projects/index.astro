@@ -5,20 +5,27 @@ import { profile } from '../../data/profile';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<SiteLayout title="Projects | Higor Lima" description="Projects by Higor Lima. Project information is being prepared for this page.">
+<SiteLayout title="Projects | Higor Lima" description="Selected project work and project placeholders for Higor Lima.">
   <section class="page-shell interior-page">
     <p class="eyebrow"><span class="eyebrow-dot"></span> 04 · Projects</p>
     <h1>Ideas in<br /><em>the making.</em></h1>
-    <div class="placeholder-panel">
-      <span class="placeholder-label">Placeholder</span>
-      <h2>Project stories will go here.</h2>
-      <p>Placeholder: add project descriptions, your role, tools, outcomes, images, and links.</p>
-    </div>
+    <p class="page-lead">A generalized case study is presented below. More project stories can be added as material is ready.</p>
+    <a class="featured-project" href={`${base}/projects/enterprise-data-integration/`}>
+      <span class="eyebrow">Business analysis · Data integration</span>
+      <h2>Enterprise Data Integration</h2>
+      <span class="featured-arrow" aria-hidden="true">↗</span>
+      <p>Requirements, data mapping, and transformation rules for a multi-system data initiative.</p>
+    </a>
     <a class="featured-project" href={`${base}/projects/odyssey-mundana/`}>
       <span class="eyebrow">Planned featured project</span>
       <h2>Odyssey Mundana</h2>
       <span class="featured-arrow" aria-hidden="true">↗</span>
       <p>Placeholder: project details to be added.</p>
     </a>
+    <div class="placeholder-panel">
+      <span class="placeholder-label">Placeholder</span>
+      <h2>More project stories to come.</h2>
+      <p>Placeholder: add other project descriptions, your role, outcomes, images, and links.</p>
+    </div>
   </section>
 </SiteLayout>

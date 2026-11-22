@@ -1,11 +1,16 @@
 export const profile = {
   name: 'Higor Lima',
-  title: 'Senior Business Analyst',
-  location: 'Warsaw, Poland',
+  title: 'Data Specialist',
+  headline: 'Building AI-Ready Data Foundations',
+  location: 'Warsaw, Mazowieckie, Poland',
+  email: 'higor.m.f.lima@gmail.com',
+  phone: '+48 792915569',
+  linkedIn: 'https://www.linkedin.com/in/higormflima',
+  yearsExperience: '6+',
   summary:
-    'Business analyst with 5+ years of experience in data analysis, business intelligence, and media analytics, with additional experience in FMCG and procurement.',
+    'Senior data and business analyst with over six years of experience in data analysis, business intelligence, and media analytics across FMCG and procurement.',
   focus:
-    'Supports data transformation initiatives by connecting business requirements with data models, analytics, and cross-functional delivery.',
+    'Currently contributing to the development and governance of consumer data assets, supporting quality, completeness, and analytical value across business domains.',
   portrait: '/images/profile/higor-lima.webp',
   portraitAlt: 'Portrait of Higor Lima',
 };

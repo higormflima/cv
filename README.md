@@ -26,7 +26,8 @@ Astro writes the static site to `dist/`. The GitHub Actions workflow in `.github
 ## Updating the site
 
 - Edit the profile summary in `src/data/profile.ts`.
-- Update work history in `src/data/experience.ts` and skills in `src/data/skills.ts`.
+- Update work history in `src/data/experience.ts`, education in `src/data/education.ts`, and skills, certifications, and languages in `src/data/skills.ts`.
+- The full Markdown CV is available at `public/documents/higor-lima-cv.md` and as a download from the home page. Keep it aligned with the structured site data when updating the CV.
 - Replace clearly marked placeholder copy on the Story and Projects pages when source material is ready.
 - The repository owner and Pages URL are configured in `astro.config.mjs`.
 - The optimized portrait is in `public/images/profile/`. Keep the original photo separately when replacing it.

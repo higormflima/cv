@@ -1,18 +1,33 @@
 export const skillGroups = [
   {
     title: 'Data and analytics',
-    items: ['SQL', 'Python', 'Power BI', 'Google BigQuery', 'Databricks', 'Dataiku'],
+    items: ['Apache Spark', 'Google BigQuery', 'Databricks', 'Power BI', 'Dataiku', 'Google Analytics'],
   },
   {
-    title: 'Ways of working',
-    items: ['Agile', 'Scrum', 'Requirements gathering', 'Stakeholder communication', 'User acceptance testing'],
+    title: 'Data foundations',
+    items: ['Data analysis', 'Data modeling', 'Data governance', 'Data quality', 'Metadata', 'Data transformation', 'Technical documentation'],
+  },
+  {
+    title: 'Business and delivery',
+    items: ['Business intelligence', 'Media analytics', 'Requirements analysis', 'Agile', 'Scrum', 'Software project management', 'Stakeholder communication', 'User acceptance testing'],
   },
   {
     title: 'Tools',
-    items: ['Azure DevOps', 'Jira', 'Monday.com', 'Google Sheets', 'Semrush', 'Brandwatch'],
+    items: ['Azure DevOps', 'Jira', 'Mantis', 'Excel', 'PowerPoint', 'Brandwatch', 'Semrush'],
   },
-  {
-    title: 'Business analysis',
-    items: ['Business requirements documents (BRD)', 'Functional requirements documents (FRD)', 'Data modeling', 'Data quality', 'Data governance', 'Business process analysis'],
-  },
+];
+
+export const certifications = [
+  'Programming Fundamentals: APIs and Web Services',
+  'Git Essential Training',
+  'ISO 9001:2015',
+  'Learn Databricks GenAI',
+  'Dataiku Advanced Designer',
+];
+
+export const languages = [
+  { name: 'Portuguese', level: 'Native or Bilingual' },
+  { name: 'English', level: 'Full Professional' },
+  { name: 'Spanish', level: 'Professional Working' },
+  { name: 'Polish', level: 'Elementary' },
 ];

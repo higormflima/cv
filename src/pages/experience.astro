@@ -1,13 +1,14 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { experience } from '../data/experience';
+import { education } from '../data/education';
 ---
 
 <SiteLayout title="Experience | Higor Lima" description="Professional experience of Higor Lima, from business analysis and data analytics to earlier engineering and aviation roles.">
   <section class="page-shell interior-page">
     <p class="eyebrow"><span class="eyebrow-dot"></span> 02 · Experience</p>
     <h1>Work that moves<br /><em>things forward.</em></h1>
-    <p class="page-lead">Selected roles and contributions, drawn from the supplied CV.</p>
+    <p class="page-lead">Roles and contributions from Higor’s latest CV.</p>
     <div class="timeline">
       {experience.map((item, index) => (
         <article class="timeline-item">
@@ -21,5 +22,19 @@ import { experience } from '../data/experience';
         </article>
       ))}
     </div>
+
+    <section class="education-section" aria-labelledby="education-heading">
+      <p class="eyebrow"><span class="eyebrow-dot"></span> Education</p>
+      <h2 id="education-heading">Learning and foundations.</h2>
+      <div class="education-list">
+        {education.map((item) => (
+          <article class="education-item">
+            <div class="timeline-meta"><span>{item.dates}</span></div>
+            <h3>{item.qualification}</h3>
+            <p>{item.institution}</p>
+          </article>
+        ))}
+      </div>
+    </section>
   </section>
 </SiteLayout>

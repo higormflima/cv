@@ -1,13 +1,13 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { skillGroups } from '../data/skills';
+import { certifications, languages, skillGroups } from '../data/skills';
 ---
 
-<SiteLayout title="Skills | Higor Lima" description="Skills and tools explicitly listed in Higor Lima's supplied CV.">
+<SiteLayout title="Skills | Higor Lima" description="Skills, certifications, and languages listed in Higor Lima's latest CV.">
   <section class="page-shell interior-page">
     <p class="eyebrow"><span class="eyebrow-dot"></span> 03 · Skills</p>
     <h1>Tools for clear<br /><em>thinking.</em></h1>
-    <p class="page-lead">Skills and tools explicitly named in the supplied CV.</p>
+    <p class="page-lead">Skills and tools from Higor’s latest CV.</p>
     <div class="skills-grid">
       {skillGroups.map((group, index) => (
         <section class="skill-card">
@@ -16,6 +16,21 @@ import { skillGroups } from '../data/skills';
           <ul>{group.items.map((item) => <li>{item}</li>)}</ul>
         </section>
       ))}
+    </div>
+
+    <div class="profile-details-grid">
+      <section class="skill-card" aria-labelledby="certifications-heading">
+        <span class="card-number">05</span>
+        <h2 id="certifications-heading">Certifications</h2>
+        <ul class="detail-list">{certifications.map((item) => <li>{item}</li>)}</ul>
+      </section>
+      <section class="skill-card" aria-labelledby="languages-heading">
+        <span class="card-number">06</span>
+        <h2 id="languages-heading">Languages</h2>
+        <ul class="language-list">
+          {languages.map((item) => <li><strong>{item.name}</strong><span>{item.level}</span></li>)}
+        </ul>
+      </section>
     </div>
   </section>
 </SiteLayout>
