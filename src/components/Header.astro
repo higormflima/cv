@@ -16,12 +16,16 @@ const activePath = currentPath.replace(/index\.html$/, '').replace(/\/$/, '') ||
     <a class="wordmark" href={`${base}/`} aria-label="Higor Lima home">HL<span>.</span></a>
     <MobileNavigation>
       <ul>
-        {navigation.map((item) => {
+        {navigation.map((item, index) => {
           const itemPath = item.href.replace(/\/$/, '') || '/';
           const isActive = activePath === itemPath || (itemPath !== '/' && activePath.startsWith(`${itemPath}/`));
           return (
             <li>
-              <a href={`${base}${item.href}`} aria-current={isActive ? 'page' : undefined}>{item.label}</a>
+              <a href={`${base}${item.href}`} aria-current={isActive ? 'page' : undefined}>
+                <span class="nav-number">{String(index + 1).padStart(2, '0')}</span>
+                <span>{item.label}</span>
+                <span class="nav-arrow" aria-hidden="true">↗</span>
+              </a>
             </li>
           );
         })}
