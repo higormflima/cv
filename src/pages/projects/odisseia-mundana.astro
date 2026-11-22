@@ -1,0 +1,54 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const projectSite = 'https://odisseiamundana.com/pt/';
+const projectRepository = 'https://github.com/higormflima/odisseiamundana';
+---
+
+<SiteLayout
+  title="Odisseia Mundana | Higor Lima"
+  description="Odisseia Mundana is Higor Lima's personal travel project and passion for life, built around travel stories, practical guides, and a handcrafted motorhome."
+>
+  <article class="page-shell interior-page project-case">
+    <p class="eyebrow"><span class="eyebrow-dot"></span> Personal project · Travel and exploration</p>
+    <h1>Odisseia<br /><em>Mundana.</em></h1>
+    <p class="page-lead">A pet project and a passion for life: a travel magazine and knowledge hub shaped by real journeys, practical research, and making things by hand.</p>
+
+    <div class="project-facts" aria-label="Project summary">
+      <div><span>My contribution</span><strong>Project direction, content, and website development</strong></div>
+      <div><span>Focus</span><strong>Travel stories, guides, and motorhome projects</strong></div>
+    </div>
+
+    <section class="project-section" aria-labelledby="about-heading">
+      <p class="eyebrow">About the project</p>
+      <h2 id="about-heading">A home for journeys and what they teach.</h2>
+      <p>Odisseia Mundana is a travel and exploration project created by Higor and Maja. It shares journeys, cultural discoveries, and practical travel advice with an emphasis on making meaningful experiences possible on a budget.</p>
+      <p>The project brings together a digital travel magazine and a structured knowledge base for travel stories, media, and reference material.</p>
+    </section>
+
+    <section class="project-section" aria-labelledby="work-heading">
+      <p class="eyebrow">My work</p>
+      <h2 id="work-heading">Building the project from story to site.</h2>
+      <ul>
+        <li>Developed and maintain the Astro website, with Portuguese-first pages, responsive layouts, and a GitHub Pages publishing workflow on a custom domain.</li>
+        <li>Organized travel content and structured journey information so stories, media, and destination details can be maintained and reused.</li>
+        <li>Built a detailed digital record of the handcrafted Iveco Daily 35.10 motorhome, covering the build, planning, and vehicle systems.</li>
+        <li>Created a browser-based motorhome electrical planning guide that estimates energy use, battery capacity, and inverter needs and produces a local PDF report.</li>
+        <li>Added validation and publishing workflows for site content and project data.</li>
+      </ul>
+    </section>
+
+    <section class="project-section" aria-labelledby="motorhome-heading">
+      <p class="eyebrow">A hands-on chapter</p>
+      <h2 id="motorhome-heading">A motorhome built in our garage.</h2>
+      <p>From December 2018 to July 2019, we converted a 1998 Iveco Daily 35.10 in our garage in São José dos Campos, Brazil. We planned the interior and built a home on wheels with a bed, kitchen, bathroom, and storage. The project documents the decisions, systems, and lessons from that work.</p>
+    </section>
+
+    <div class="hero-actions">
+      <a class="button button-primary" href={projectSite} target="_blank" rel="noreferrer">Visit the project site <span aria-hidden="true">↗</span></a>
+      <a class="text-link" href={projectRepository} target="_blank" rel="noreferrer">Explore the source repository <span aria-hidden="true">↗</span></a>
+    </div>
+    <p class="project-disclosure"><a href={`${base}/projects/`}>← Back to projects</a></p>
+  </article>
+</SiteLayout>
