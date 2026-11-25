@@ -41,9 +41,17 @@ try {
   await og.evaluate(() => document.fonts.ready);
   await og.screenshot({ path: join(dist, 'og.png'), clip: { x: 0, y: 0, width: 1200, height: 630 } });
   console.log('✓ dist/og.png');
+
+  // LinkedIn banner, rendered at 2× (3168×792) so it stays sharp on high-density screens.
+  const banner = await browser.newPage({ viewport: { width: 1584, height: 396 }, deviceScaleFactor: 2 });
+  await banner.goto(`${origin}/linkedin-banner/`, { waitUntil: 'networkidle' });
+  await banner.evaluate(() => document.fonts.ready);
+  await banner.screenshot({ path: join(dist, 'documents', 'linkedin-banner.png'), clip: { x: 0, y: 0, width: 1584, height: 396 } });
+  console.log('✓ dist/documents/linkedin-banner.png');
 } finally {
   await browser.close();
   server.close();
 }
 
 await rm(join(dist, 'og-card'), { recursive: true, force: true });
+await rm(join(dist, 'linkedin-banner'), { recursive: true, force: true });
