@@ -42,6 +42,7 @@ Astro writes the static site to `dist/`. The GitHub Actions workflow in `.github
 
 - Edit the profile summary in `src/data/profile.ts`.
 - Update work history in `src/data/experience.ts`, education in `src/data/education.ts`, and skills, certifications, and languages in `src/data/skills.ts`. Role `stack` entries must match skill names in `skills.ts` to appear in the skills graph.
+- Bayer missions, stats, golden-query test, decisions (ADRs), proposals (RFCs), changelog and talks are in `src/data/contributions.ts`, the structured and public-safe version of `docs/bayer-contributions-report.md`. Keep internal names generic.
 - The Story page narrative is in `src/data/story.ts`.
 - The PDF CV is generated from the same data via `src/pages/resume.astro`. The Markdown CV at `public/documents/higor-lima-cv.md` is maintained by hand; keep it aligned with the structured site data.
 - The repository owner and Pages URL are configured in `astro.config.mjs`.

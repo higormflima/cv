@@ -11,7 +11,11 @@ const STOPWORDS = new Set(
 );
 
 const SYNONYMS: Record<string, string[]> = {
-  ai: ['ai', 'genai', 'scientist', 'feature'],
+  ai: ['ai', 'genai', 'scientist', 'feature', 'agent', 'copilot', 'cursor', 'claude', 'genie'],
+  llm: ['ai', 'agent', 'copilot', 'claude', 'genie'],
+  copilot: ['copilot'],
+  github: ['github', 'pull', 'codeowner', 'ruleset'],
+  metadata: ['metadata', 'yaml', 'glossary', 'dictionary', 'semantic'],
   ml: ['ai', 'scientist', 'feature'],
   bi: ['business', 'intelligence', 'power', 'dashboard'],
   dashboard: ['dashboard', 'power', 'bi'],
@@ -38,7 +42,9 @@ const INTENTS: { pattern: RegExp; kinds: KnowledgeChunk['kind'][]; intro: string
   { pattern: /\b(languages?|speak|speaks|fluent|polish|spanish|portuguese|english)\b/i, kinds: ['languages'], intro: 'Higor works in four languages:' },
   { pattern: /\b(educat\w*|degree|universit\w*|stud(y|ied)|school|graduat\w*|unesp|senai)\b/i, kinds: ['education'], intro: 'Education:' },
   { pattern: /\bcertif\w*/i, kinds: ['certifications'], intro: 'Certifications listed in the CV:' },
-  { pattern: /\b(projects?|portfolio|side project)\b/i, kinds: ['project'], intro: 'Projects on this site:' },
+  { pattern: /\b(talks|gave a talk|speak(er|ing|s)?|presentations?|conferences?|on stage)\b/i, kinds: ['talk'], intro: 'Talks Higor has given:' },
+  { pattern: /\b(decisions?|adrs?|rfcs?|proposals?|judg(e)?ment)\b/i, kinds: ['decision'], intro: 'Decisions and proposals on record:' },
+  { pattern: /\b(projects?|portfolio|side project|case stud(y|ies))\b/i, kinds: ['project'], intro: 'Projects on this site:' },
   { pattern: /\b(who is|about (him|higor)|summary|introduce|background|story)\b/i, kinds: ['profile', 'story'], intro: 'In short:' },
 ];
 

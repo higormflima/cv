@@ -12,6 +12,14 @@ export const skillGroups = [
     items: ['Business intelligence', 'Media analytics', 'Requirements analysis', 'Agile', 'Scrum', 'Software project management', 'Stakeholder communication', 'User acceptance testing'],
   },
   {
+    title: 'AI and agents',
+    items: ['Cursor', 'GitHub Copilot', 'Claude', 'Databricks Genie', 'MCP'],
+  },
+  {
+    title: 'Docs-as-Code and platform',
+    items: ['GitHub Actions', 'MkDocs', 'YAML', 'JSON Schema', 'Unity Catalog', 'Databricks Asset Bundles', 'Python'],
+  },
+  {
     title: 'Tools',
     items: ['Azure DevOps', 'Jira', 'Mantis', 'Excel', 'PowerPoint', 'Brandwatch', 'Semrush'],
   },

@@ -3,6 +3,9 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import CareerGantt from '../components/CareerGantt.astro';
 import { experience, trackLabels } from '../data/experience';
 import { education } from '../data/education';
+import { talks } from '../data/contributions';
+import MissionLanes from '../components/MissionLanes.astro';
+import { base } from '../lib/paths';
 ---
 
 <SiteLayout title="Experience | Higor Lima" description="Professional experience of Higor Lima: data governance and analytics at Bayer, business analysis at Chubb and Reckitt, BI consulting for Unilever, and earlier engineering and aviation roles.">
@@ -26,6 +29,8 @@ import { education } from '../data/education';
             <p class="role-title">{item.role}</p>
             <p class="role-location">{item.location}</p>
             <ul>{item.highlights.map((highlight) => <li>{highlight}</li>)}</ul>
+            {item.id === 'bayer' && <MissionLanes />}
+            {item.id === 'bayer' && <p class="role-links"><a class="text-link" href={`${base}/projects/ai-ready-data-products/`}>Case study: AI-ready data products →</a><a class="text-link" href={`${base}/decisions/`}>Decision records →</a></p>}
             {item.stack && <ul class="stack-list" aria-label="Tools and practices">{item.stack.map((tool) => <li class="chip">{tool}</li>)}</ul>}
           </div>
         </article>
@@ -45,5 +50,23 @@ import { education } from '../data/education';
         ))}
       </div>
     </section>
+
+    <section class="education-section" id="speaking" aria-labelledby="speaking-heading">
+      <p class="eyebrow"><span class="eyebrow-dot"></span>// speaking</p>
+      <h2 id="speaking-heading" class="page-title" style="font-size: clamp(2rem, 4vw, 3rem)">On stage.</h2>
+      <div class="education-list">
+        {talks.map((talk) => (
+          <article class="education-item card" data-track="data" data-reveal>
+            <span class="track-badge mono">{talk.date}</span>
+            <h3>{talk.title}</h3>
+            <p>{talk.event} · Bayer</p>
+          </article>
+        ))}
+      </div>
+    </section>
   </section>
 </SiteLayout>
+
+<style>
+  .role-links { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin: 0 0 1rem; font-size: .9rem; }
+</style>

@@ -12,7 +12,8 @@ export const profile = {
   summary:
     'Senior data and business analyst with over six years of experience in data analysis, business intelligence, and media analytics across FMCG and procurement.',
   focus:
-    'Currently contributing to the development and governance of consumer data assets, supporting quality, completeness, and analytical value across business domains.',
+    'Currently helping run a docs-as-code metadata platform that turns documentation into AI-ready data products, onboarding teams to it, and testing the results against AI agents.',
+  status: 'status: shipping AI-ready data products @ Bayer',
   portrait: '/images/profile/higor-lima.webp',
   portraitAlt: 'Portrait of Higor Lima',
 };

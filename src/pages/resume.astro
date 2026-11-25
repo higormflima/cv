@@ -5,6 +5,7 @@ import { profile } from '../data/profile';
 import { experience, shortRole } from '../data/experience';
 import { education } from '../data/education';
 import { certifications, languages, skillGroups } from '../data/skills';
+import { talks } from '../data/contributions';
 import { siteUrl } from '../lib/paths';
 ---
 
@@ -67,6 +68,8 @@ import { siteUrl } from '../lib/paths';
           <ul class="plain">{certifications.map((c) => <li>{c}</li>)}</ul>
           <h2><span>//</span> Languages</h2>
           <ul class="plain">{languages.map((l) => <li><strong>{l.name}</strong> — {l.level}</li>)}</ul>
+          <h2><span>//</span> Speaking</h2>
+          <ul class="plain">{talks.map((t) => <li><strong>{t.title}</strong><br />{t.event}, {t.date}</li>)}</ul>
         </aside>
       </div>
       <footer class="foot">Machine-readable version: {siteUrl}/api/profile.json</footer>

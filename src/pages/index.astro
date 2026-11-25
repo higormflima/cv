@@ -8,6 +8,7 @@ import { experience } from '../data/experience';
 import { cv } from '../data/cv';
 import { base } from '../lib/paths';
 import { highlightJson } from '../lib/highlight';
+import { aiWorkflow } from '../data/contributions';
 
 const current = experience[0];
 const excerpt = {
@@ -18,7 +19,8 @@ const excerpt = {
 const excerptJson = JSON.stringify(excerpt, null, 2).replace(/\n\}$/, `,\n  // … ${cv.work.length - 1} more roles · GET /api/profile.json\n}`);
 
 const queries = [
-  { q: `SELECT focus FROM career WHERE year = ${new Date().getFullYear()};`, a: `→ "AI-ready consumer data assets @ ${current.organization}"` },
+  { q: `SELECT focus FROM career WHERE year = ${new Date().getFullYear()};`, a: `→ "AI-ready data products @ ${current.organization}"` },
+  { q: "SELECT result FROM golden_queries WHERE agent = 'talk-to-data';", a: '→ 4/4 passed · avg 4.57/5 · verdict: Go' },
   { q: 'SELECT COUNT(*) FROM careers ORDER BY curiosity DESC;', a: '→ 4  -- military · engineering · quality · data' },
   { q: "SELECT stack FROM skills WHERE used_at = 'Reckitt';", a: '→ BigQuery, Databricks, Power BI, Agile' },
   { q: 'SELECT value FROM raw_data JOIN business USING (insight);', a: '→ 1 row · real business value ✓  (6+ yrs)' },
@@ -29,6 +31,7 @@ const cards = [
   { n: '02', path: '~/experience', title: 'Experience', note: `${experience.length} roles on an interactive timeline.`, href: '/experience/' },
   { n: '03', path: '~/skills', title: 'Skills graph', note: 'Tools, practices and where they were used.', href: '/skills/' },
   { n: '04', path: '~/projects', title: 'Projects', note: 'Case studies with data-lineage diagrams.', href: '/projects/' },
+  { n: '05', path: '~/decisions', title: 'Decisions', note: 'Architecture decision records and RFCs.', href: '/decisions/' },
 ];
 ---
 
@@ -37,7 +40,7 @@ const cards = [
     <HeroCanvas />
     <div class="hero-grid page-shell">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-dot"></span>status: building AI-ready data foundations @ {current.organization}</p>
+        <p class="eyebrow"><span class="eyebrow-dot"></span>{profile.status}</p>
         <h1 class="hero-title">From raw data<br /> to <span class="gradient-text">real business value.</span></h1>
         <p class="hero-intro"><strong>{profile.name}</strong> is a {profile.title} in {profile.shortLocation} with {profile.yearsExperience} years in data analysis, business intelligence and media analytics across FMCG and procurement, now building governed, AI-ready consumer data assets at {current.organization}.</p>
 
@@ -76,7 +79,7 @@ const cards = [
         </div>
         <ul class="float-tags mono" aria-hidden="true">
           <li style="--d:0s">role: <b>"{profile.title}"</b></li>
-          <li style="--d:1.2s">stack: <b>["Databricks", "BigQuery", "Power BI"]</b></li>
+          <li style="--d:1.2s">stack: <b>["Databricks", "Unity Catalog", "Copilot"]</b></li>
           <li style="--d:2.4s">location: <b>"{profile.shortLocation}"</b></li>
         </ul>
       </div>
@@ -117,7 +120,7 @@ const cards = [
         <p>{profile.summary}</p>
         <p class="md-h2"><span class="md-mark">##</span> Now</p>
         <p>{profile.focus}</p>
-        <ul class="chip-row">{current.stack?.map((item) => <li class="chip">{item}</li>)}</ul>
+        <ul class="chip-row">{current.stack?.slice(0, 8).map((item) => <li class="chip">{item}</li>)}</ul>
       </div>
       <div class="tab-panel" role="tabpanel" id="panel-json" aria-labelledby="tab-json" hidden>
         <pre class="code"><code set:html={highlightJson(excerptJson)} /></pre>
@@ -125,10 +128,32 @@ const cards = [
     </div>
   </section>
 
+  <section class="section page-shell" aria-labelledby="hitl-heading">
+    <div class="section-heading" data-reveal>
+      <div>
+        <p class="eyebrow">// 03 human-in-the-loop</p>
+        <h2 id="hitl-heading">{aiWorkflow.rule}</h2>
+      </div>
+      <p>I use AI agents every day, and I stay accountable for every result. This site was built the same way.</p>
+    </div>
+    <ol class="hitl-steps">
+      {aiWorkflow.steps.map((step, index) => (
+        <li class:list={['hitl-step card', `is-${step.who}`]} data-reveal style={`--reveal-delay:${index * 80}ms`}>
+          <span class="hitl-who mono">{step.who === 'ai' ? '🤖 AI' : '👤 me'}</span>
+          <span class="hitl-fn mono">{step.step}</span>
+          <span class="hitl-text">{step.text}</span>
+        </li>
+      ))}
+    </ol>
+    <ul class="hitl-examples" data-reveal>
+      {aiWorkflow.examples.map((example) => <li>{example}</li>)}
+    </ul>
+  </section>
+
   <section class="section page-shell" aria-labelledby="explore-heading">
     <div class="section-heading" data-reveal>
       <div>
-        <p class="eyebrow">// 03 explore</p>
+        <p class="eyebrow">// 04 explore</p>
         <h2 id="explore-heading">Go deeper.</h2>
       </div>
     </div>
@@ -277,7 +302,19 @@ const cards = [
   .code :global(.tok-punct) { color: var(--code-punct); }
   .code :global(.tok-comment) { color: var(--text-mute); font-style: italic; }
 
-  .explore-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .hitl-steps { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 0 0 1.5rem; padding: 0; list-style: none; counter-reset: step; }
+  .hitl-step { display: grid; align-content: start; gap: .45rem; padding: 1.25rem; }
+  .hitl-step.is-ai { border-style: dashed; border-color: color-mix(in srgb, var(--accent-2) 45%, transparent); }
+  .hitl-who { color: var(--text-mute); font-size: .7rem; }
+  .is-ai .hitl-who { color: var(--accent-2); }
+  .hitl-fn { color: var(--accent); font-size: 1rem; font-weight: 600; }
+  .is-ai .hitl-fn { color: var(--accent-2); }
+  .hitl-text { color: var(--text-soft); font-size: .88rem; line-height: 1.5; }
+  .hitl-step:not(:last-child)::after { position: absolute; top: 50%; right: -.85rem; z-index: 1; color: var(--text-mute); font-family: var(--mono); content: '→'; transform: translateY(-50%); }
+  .hitl-examples { display: grid; gap: .5rem; max-width: 900px; margin: 0; padding-left: 1.2rem; color: var(--text-soft); font-size: .92rem; }
+  .hitl-examples li::marker { color: var(--accent); content: '› '; }
+
+  .explore-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
   .explore-card { display: flex; min-height: 210px; flex-direction: column; gap: .5rem; padding: 1.4rem; color: inherit; text-decoration: none; }
   .explore-path { color: var(--accent); font-size: .74rem; }
   .explore-title { margin-top: auto; font-size: 1.45rem; font-weight: 650; letter-spacing: -.03em; }
@@ -285,14 +322,14 @@ const cards = [
   .explore-arrow { position: absolute; top: 1.2rem; right: 1.3rem; color: var(--text-mute); transition: color .2s ease, transform .2s ease; }
   .explore-card:hover .explore-arrow { color: var(--accent); transform: translate(3px, -3px); }
 
-  @media (max-width: 1080px) { .explore-grid { grid-template-columns: repeat(2, 1fr); } .float-tags li:nth-child(1) { left: -6%; } .float-tags li:nth-child(2) { right: -4%; } }
+  @media (max-width: 1080px) { .explore-grid { grid-template-columns: repeat(2, 1fr); } .hitl-steps { grid-template-columns: repeat(2, 1fr); } .hitl-step::after { display: none; } .float-tags li:nth-child(1) { left: -6%; } .float-tags li:nth-child(2) { right: -4%; } }
   @media (max-width: 860px) {
     .hero-grid { grid-template-columns: 1fr; }
     .hero-portrait { max-width: 340px; justify-self: center; margin-top: 1rem; }
     .float-tags li:nth-child(1) { left: -10%; } .float-tags li:nth-child(2) { right: -12%; }
   }
   @media (max-width: 560px) {
-    .explore-grid { grid-template-columns: 1fr; }
+    .explore-grid, .hitl-steps { grid-template-columns: 1fr; }
     .explore-card { min-height: 150px; }
     .float-tags li:nth-child(2) { display: none; }
     .copy-button { display: none; }

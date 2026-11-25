@@ -1,0 +1,88 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { decisions, openIdeas, proposals } from '../data/contributions';
+import { base } from '../lib/paths';
+---
+
+<SiteLayout title="Decisions | Higor Lima" description="Architecture decision records and proposals from Higor Lima's work on AI-ready data products: context, options, decision, rationale and his role.">
+  <section class="page-shell interior-page">
+    <p class="eyebrow"><span class="eyebrow-dot"></span>// 05 decisions</p>
+    <h1 class="page-title">Judgement, <span class="gradient-text">on the record.</span></h1>
+    <p class="page-lead">Tasks show what I did. Decisions show how I think. These are written as architecture decision records (ADRs) and requests for comments (RFCs), the way I write them at work.</p>
+
+    <section aria-labelledby="adr-heading">
+      <h2 id="adr-heading" class="list-heading mono">docs/adr/ <span>{decisions.length} records</span></h2>
+      <div class="adr-list">
+        {decisions.map((adr, index) => (
+          <details class="adr card" open={index < 2} data-reveal>
+            <summary>
+              <code class="adr-id">{adr.id}</code>
+              <span class="adr-title">{adr.title}</span>
+              <span class:list={['badge', `badge-${adr.status}`]}>{adr.status}</span>
+            </summary>
+            <dl>
+              <dt>context</dt><dd>{adr.context}</dd>
+              <dt>decision</dt><dd>{adr.decision}</dd>
+              {adr.why && <><dt>why</dt><dd>{adr.why}</dd></>}
+              <dt>my role</dt><dd>{adr.role}</dd>
+            </dl>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="rfc-heading">
+      <h2 id="rfc-heading" class="list-heading mono">docs/rfc/ <span>{proposals.length} proposals</span></h2>
+      <div class="rfc-grid">
+        {proposals.map((rfc) => (
+          <article class="rfc card card-glow" data-reveal>
+            <header><code class="adr-id">{rfc.id}</code><span class="badge badge-proposed">{rfc.status}</span></header>
+            <h3>{rfc.title}</h3>
+            <p>{rfc.summary}</p>
+            <ul>{rfc.points.map((point) => <li>{point}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+      <div class="ideas card" data-reveal>
+        <p class="mono comment">// TODO: open ideas</p>
+        <ul>{openIdeas.map((idea) => <li>{idea}</li>)}</ul>
+      </div>
+    </section>
+
+    <p class="project-disclosure">Generalized from work at Bayer Consumer Health in 2026. Internal names are omitted. <a class="text-link" href={`${base}/projects/ai-ready-data-products/`}>See the case study →</a></p>
+  </section>
+</SiteLayout>
+
+<style>
+  .list-heading { display: flex; align-items: baseline; gap: 1rem; margin: 2.5rem 0 1rem; font-size: 1.1rem; font-weight: 600; letter-spacing: 0; }
+  .list-heading span { color: var(--text-mute); font-size: .75rem; font-weight: 400; }
+  .adr-list { display: grid; gap: .6rem; max-width: 960px; }
+  .adr { padding: 0; overflow: hidden; }
+  .adr summary { display: grid; grid-template-columns: 5.5rem 1fr auto; align-items: center; gap: 1rem; padding: 1rem 1.2rem; cursor: pointer; list-style: none; }
+  .adr summary::-webkit-details-marker { display: none; }
+  .adr summary:hover .adr-title { color: var(--accent); }
+  .adr[open] summary { border-bottom: 1px solid var(--line); }
+  .adr-id { color: var(--accent); font-size: .78rem; }
+  .adr-title { font-weight: 600; transition: color .2s ease; }
+  .badge { padding: .15rem .55rem; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text-soft); font-family: var(--mono); font-size: .66rem; white-space: nowrap; }
+  .badge-accepted { border-color: color-mix(in srgb, #3ddc84 50%, transparent); color: #3ddc84; }
+  .badge-proposed { border-color: color-mix(in srgb, var(--accent-4) 50%, transparent); color: var(--accent-4); }
+  dl { display: grid; grid-template-columns: 6rem 1fr; gap: .6rem 1rem; margin: 0; padding: 1rem 1.2rem 1.2rem; }
+  dt { color: var(--text-mute); font-family: var(--mono); font-size: .74rem; padding-top: .15rem; }
+  dd { margin: 0; color: var(--text-soft); font-size: .92rem; }
+  .rfc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; max-width: 960px; }
+  .rfc { padding: 1.4rem; }
+  .rfc header { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .6rem; }
+  .rfc h3 { margin-bottom: .6rem; font-size: 1.25rem; }
+  .rfc p, .rfc li, .ideas li { color: var(--text-soft); font-size: .9rem; }
+  .rfc ul, .ideas ul { display: grid; gap: .4rem; margin: 0; padding-left: 1.1rem; }
+  .rfc li::marker, .ideas li::marker { color: var(--accent); content: '› '; }
+  .ideas { max-width: 960px; margin-top: 1rem; padding: 1.2rem 1.4rem; }
+  @media (max-width: 760px) {
+    .rfc-grid { grid-template-columns: 1fr; }
+    .adr summary { grid-template-columns: 1fr auto; }
+    .adr-title { grid-column: 1 / -1; grid-row: 2; }
+    dl { grid-template-columns: 1fr; gap: .2rem; }
+    dd { margin-bottom: .5rem; }
+  }
+</style>

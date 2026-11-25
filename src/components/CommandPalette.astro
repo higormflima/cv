@@ -9,6 +9,8 @@ const items = [
   { group: 'Navigate', label: 'Experience', hint: '~/experience', action: 'go', value: '/experience/' },
   { group: 'Navigate', label: 'Skills graph', hint: '~/skills', action: 'go', value: '/skills/' },
   { group: 'Navigate', label: 'Projects', hint: '~/projects', action: 'go', value: '/projects/' },
+  { group: 'Navigate', label: 'Decisions (ADRs & RFCs)', hint: '~/decisions', action: 'go', value: '/decisions/' },
+  { group: 'Navigate', label: 'AI-ready data products', hint: 'case study', action: 'go', value: '/projects/ai-ready-data-products/' },
   { group: 'Navigate', label: 'Enterprise Data Integration', hint: 'project', action: 'go', value: '/projects/enterprise-data-integration/' },
   { group: 'Navigate', label: 'Odisseia Mundana', hint: 'project', action: 'go', value: '/projects/odisseia-mundana/' },
   ...experience.map((role) => ({ group: 'Roles', label: `${role.organization}`, hint: shortRole(role), action: 'go', value: `/experience/#${role.id}` })),
@@ -110,7 +112,7 @@ const items = [
       print(['available commands:', '  whoami            who is this?', '  ls [projects]     list sections or projects', '  cat cv.json       print the machine-readable CV', '  history           career log', '  ask <question>    ask my CV', '  theme             toggle light/dark', '  contact           how to reach me', '  sudo hire higor   try it', '  clear | exit'].join('\n')),
     whoami: () => print('higor lima — data specialist @ bayer · warsaw, pl\nbuilding AI-ready data foundations: from raw data to real business value.'),
     ls: (args) =>
-      print(args[0]?.startsWith('proj') ? 'enterprise-data-integration/   odisseia-mundana/' : 'story/   experience/   skills/   projects/   api/profile.json   documents/higor-lima-cv.pdf'),
+      print(args[0]?.startsWith('proj') ? 'ai-ready-data-products/   enterprise-data-integration/   odisseia-mundana/' : 'story/   experience/   skills/   projects/   decisions/   api/profile.json   documents/higor-lima-cv.pdf'),
     cat: (args) => {
       if (/cv|profile|json/.test(args[0] ?? '')) {
         print('fetching /api/profile.json …');

@@ -2,6 +2,7 @@ import { profile } from './profile';
 import { experience } from './experience';
 import { education } from './education';
 import { certifications, languages, skillGroups } from './skills';
+import { bayerStats, decisions, goldenTest, talks } from './contributions';
 
 const site = 'https://higormflima.github.io/cv';
 
@@ -36,5 +37,20 @@ export const cv = {
   skills: skillGroups.map((group) => ({ name: group.title, keywords: group.items })),
   certificates: certifications.map((name) => ({ name })),
   languages: languages.map((item) => ({ language: item.name, fluency: item.level })),
+  projects: [
+    {
+      name: 'AI-ready data products (Bayer)',
+      description: 'Docs-as-code metadata platform turning version-controlled documentation into data products for Databricks, a data product registry and AI agents.',
+      highlights: [
+        `Golden-query test against an AI agent: ${goldenTest.passed}/${goldenTest.total} passed, average score ${goldenTest.averageScore}/${goldenTest.maxScore}.`,
+        ...bayerStats.map((stat) => `${stat.value} ${stat.label} (${stat.detail})`),
+      ],
+      url: `${site}/projects/ai-ready-data-products/`,
+    },
+    { name: 'Enterprise Data Integration', url: `${site}/projects/enterprise-data-integration/` },
+    { name: 'Odisseia Mundana', url: `${site}/projects/odisseia-mundana/` },
+  ],
+  talks: talks.map((talk) => ({ title: talk.title, event: talk.event, date: talk.date })),
+  decisions: decisions.map((adr) => ({ id: adr.id, title: adr.title, status: adr.status })),
   meta: { canonical: `${site}/api/profile.json`, pdf: `${site}/documents/higor-lima-cv.pdf` },
 };

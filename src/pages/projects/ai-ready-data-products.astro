@@ -1,0 +1,112 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import LineageDiagram from '../../components/LineageDiagram.astro';
+import { bayerStats, bayerTimeline, goldenTest, metadataArtifacts } from '../../data/contributions';
+import { base } from '../../lib/paths';
+
+const lineage = [
+  { label: 'Author', nodes: ['Governance contract', 'Glossary', 'Data dictionary', 'Golden queries'] },
+  { label: 'Validate', nodes: ['CI checks', 'Expert review'] },
+  { label: 'Compile', nodes: ['Semantic layer engine'], highlight: true },
+  { label: 'Publish', nodes: ['Databricks', 'Product registry', 'Talk-to-Data agents'] },
+];
+const queries = Array.from({ length: goldenTest.total }, (_, i) => i < goldenTest.passed);
+---
+
+<SiteLayout
+  title="AI-ready data products | Higor Lima"
+  description="Case study: a docs-as-code metadata platform that turns version-controlled documentation into AI-ready data products, tested end to end against an AI agent."
+>
+  <article class="page-shell interior-page project-case">
+    <p class="eyebrow"><span class="eyebrow-dot"></span>// case study · bayer consumer health · 2026</p>
+    <h1 class="page-title">AI-ready <span class="gradient-text">data products.</span></h1>
+    <p class="page-lead">How a docs-as-code metadata platform turns version-controlled documentation into data products that people and AI agents can trust, and how I helped run it.</p>
+
+    <div class="project-facts card" aria-label="Project summary">
+      <div><span>Role</span><strong>Data Analyst · repo admin · enablement lead · reviewer</strong></div>
+      <div><span>Focus</span><strong>Metadata, governance and AI readiness</strong></div>
+    </div>
+
+    <LineageDiagram title="from YAML in a pull request to an answer from an AI agent" columns={lineage} />
+
+    <section class="project-section" aria-labelledby="model-heading">
+      <p class="eyebrow">The metadata model</p>
+      <h2 id="model-heading">Documentation is the product.</h2>
+      <p>Each data product is described by a set of YAML artifacts. CI validates them, an expert reviews the pull request, and merging compiles them into registry entries and agent context. Nothing reaches an AI agent without passing that chain.</p>
+      <div class="artifact-grid">
+        {metadataArtifacts.map((artifact) => (
+          <div class="artifact card"><code>{artifact.name.toLowerCase().replace(/ /g, '_')}.yaml</code><span>{artifact.purpose}</span></div>
+        ))}
+      </div>
+    </section>
+
+    <section class="project-section wide" aria-labelledby="test-heading">
+      <p class="eyebrow">End-to-end test</p>
+      <h2 id="test-heading">Testing an AI data product with AI.</h2>
+      <p>I sent each golden question word for word to the company agent platform from Cursor via MCP, then compared both the answer and the generated SQL with the golden set.</p>
+      <pre class="test-report card"><code><span class="t-prompt">$</span> run golden-queries --product {goldenTest.product} --agent talk-to-data
+{queries.map((ok, i) => <><span class={ok ? 't-pass' : 't-fail'}>{ok ? '  ✓' : '  ✗'}</span> query {i + 1}/{goldenTest.total}  answer + SQL match golden joins and filters{'\n'}</>)}
+<span class="t-pass">{goldenTest.passed} passed</span> · 0 failed · avg weighted score <span class="t-num">{goldenTest.averageScore}</span>/{goldenTest.maxScore} · verdict: <span class="t-pass">{goldenTest.verdict}</span>
+
+{goldenTest.findings.map((finding, i) => <><span class="t-warn">  ⚠ finding {i + 1}</span>  {finding}{'\n'}</>)}</code></pre>
+      <p>Passing is not the end: the three findings went back to the data steward as metadata fixes and better tests.</p>
+    </section>
+
+    <section class="project-section wide" aria-labelledby="numbers-heading">
+      <p class="eyebrow">In numbers</p>
+      <h2 id="numbers-heading">Nine months of pull requests.</h2>
+      <div class="stat-grid">
+        {bayerStats.map((stat) => (
+          <div class="stat card"><strong class="mono">{stat.value}</strong><span>{stat.label}</span><small>{stat.detail}</small></div>
+        ))}
+      </div>
+    </section>
+
+    <section class="project-section" aria-labelledby="work-heading">
+      <p class="eyebrow">My work</p>
+      <h2 id="work-heading">From one data asset to the whole platform.</h2>
+      <ul>
+        <li>Authored the first data dictionaries for the consumer core data asset: one price dimension and nine fact tables, validated with the engine’s validator and unit tests.</li>
+        <li>Co-designed the split of a marketing analytics product family into five pillar data products with reusable table semantics, and promoted their storage through three environments as infrastructure as code.</li>
+        <li>Onboarded six teams, including finance, manufacturing, an external partner and an unstructured-data squad, using a <em>minimum viable metadata</em> approach: about 10 core fields first, then iterate.</li>
+        <li>Helped define the first data product built on unstructured documents, with semantics as metadata on document chunks.</li>
+        <li>Built the docs site’s interactive workflow diagram, live PR previews and code-backed architecture diagrams, and set up repository governance with native GitHub controls.</li>
+      </ul>
+      <p><a class="text-link" href={`${base}/decisions/`}>Read the decisions behind this work →</a></p>
+    </section>
+
+    <section class="project-section" aria-labelledby="log-heading">
+      <p class="eyebrow">Changelog</p>
+      <h2 id="log-heading">git log --reverse</h2>
+      <ol class="changelog mono">
+        {bayerTimeline.map((entry) => <li><time>{entry.when}</time><span>{entry.text}</span></li>)}
+      </ol>
+    </section>
+
+    <p class="project-disclosure">This public summary is generalized: internal platform, product, team and event names, colleague names and business figures are omitted.</p>
+    <a class="text-link" href={`${base}/projects/`}>← Back to projects</a>
+  </article>
+</SiteLayout>
+
+<style>
+  .wide { max-width: 960px; }
+  .artifact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .6rem; margin-top: 1.25rem; }
+  .artifact { display: grid; gap: .25rem; padding: .8rem .9rem; }
+  .artifact code { color: var(--accent); font-size: .76rem; }
+  .artifact span { color: var(--text-soft); font-size: .82rem; }
+  .test-report { margin: 1.25rem 0; padding: 1.1rem 1.25rem; overflow-x: auto; color: var(--text-soft); font-size: .8rem; line-height: 1.75; white-space: pre-wrap; }
+  .t-prompt { color: var(--accent); }
+  .t-pass { color: #3ddc84; font-weight: 600; }
+  .t-fail { color: #ff6b6b; }
+  .t-warn { color: var(--accent-4); }
+  .t-num { color: var(--code-number); }
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-top: 1.25rem; }
+  .stat { display: grid; gap: .15rem; padding: 1rem 1.1rem; }
+  .stat strong { font-size: 2rem; letter-spacing: -.04em; line-height: 1; }
+  .stat span { color: var(--text-soft); font-size: .86rem; }
+  .stat small { color: var(--text-mute); font-family: var(--mono); font-size: .66rem; }
+  .changelog { display: grid; gap: .55rem; margin: 0; padding: 0; list-style: none; font-size: .8rem; }
+  .changelog li { display: grid; grid-template-columns: 5.5rem 1fr; gap: 1rem; color: var(--text-soft); }
+  .changelog time { color: var(--accent); }
+  @media (max-width: 640px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } .changelog li { grid-template-columns: 1fr; gap: .1rem; } }
+</style>

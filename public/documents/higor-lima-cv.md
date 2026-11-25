@@ -19,12 +19,15 @@ Experienced in data transformation, analytics, data quality, data governance, Ag
 
 **March 2026 – Present** · Warsaw, Mazowieckie, Poland
 
-- Contribute to the development and governance of core consumer data assets, supporting completeness, quality, and analytical value across business domains.
-- Partner with data owners, product managers, engineers, architects, stewards, and data scientists to translate business needs into scalable data solutions.
-- Support integration of new organizational datasets, aligning ingestion with data standards.
-- Define transformation logic and enrich raw data for KPIs, features, and consumption-layer assets used in analytics and AI initiatives.
-- Establish metadata and documentation, implement data quality and monitoring processes, and support data asset users with guidance and troubleshooting.
-- Analyze complex datasets to generate insights for analytics products and AI-driven solutions.
+- Help run a docs-as-code metadata platform: data products are described in version-controlled YAML, validated in CI, and published to Databricks, a federated data product registry and Talk-to-Data agents.
+- Co-designed and delivered the first pillar data products of a marketing analytics product family, and tested one end to end against an AI agent: 4 of 4 golden queries passed (average score 4.57 of 5).
+- Onboarded six teams to the semantic layer, covering the metadata model, the PR-based workflow, the expert-review quality gate and the deployment chain.
+- Set up repository governance with native GitHub controls (CODEOWNERS, rulesets), issue forms, PR templates and live docs previews; 37 pull requests merged and 19 code reviews.
+- Rebuilt the consumer core data asset wiki and data catalog to a 13-section standard, and acted as scrum master and project coordinator for the asset team.
+- Work AI-assisted with Cursor, GitHub Copilot, Claude and Databricks Genie: AI drafts, I frame, review, validate and decide.
+- Presented the data platform and semantic layer at two internal events.
+
+*This public summary omits internal platform, product, team and event names.*
 
 ### Chubb Fire & Security — Business Analyst
 
@@ -119,6 +122,8 @@ Experienced in data transformation, analytics, data quality, data governance, Ag
 
 - Data analysis, business intelligence, media analytics, data modeling, data governance, data quality, metadata, and data transformation
 - Apache Spark, Google BigQuery, Databricks, Power BI, Dataiku, Google Analytics, SQL, and Python
+- AI and agents: Cursor, GitHub Copilot, Claude, Databricks Genie, and MCP
+- Docs-as-Code and platform: GitHub Actions, MkDocs, YAML, JSON Schema, Unity Catalog, and Databricks Asset Bundles
 - Azure DevOps, Jira, Mantis, Excel, PowerPoint, Brandwatch, and Semrush
 - Agile, Scrum, requirements analysis, stakeholder communication, and user acceptance testing
 
@@ -136,3 +141,8 @@ Experienced in data transformation, analytics, data quality, data governance, Ag
 - English — Full Professional
 - Spanish — Professional Working
 - Polish — Elementary
+
+## Speaking
+
+- Promoting the company data platform — internal technology conference, October 2026
+- The data platform and the semantic layer engine — internal company event, November 2026

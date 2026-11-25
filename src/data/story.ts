@@ -34,8 +34,8 @@ export const storyStages = [
   {
     step: 'serve',
     years: '2026 – now',
-    title: 'AI-ready data foundations',
-    text: 'At Bayer I help build and govern consumer data assets: complete, high-quality, documented, and ready for analytics and AI. Everything before this point is part of how I do that work.',
-    carry: ['Data governance', 'Data quality', 'AI readiness'],
+    title: 'AI-ready data products',
+    text: 'At Bayer I help run a docs-as-code metadata platform that turns documentation into AI-ready data products, onboard teams to it, and test the results against AI agents. Everything before this point is part of how I do that work.',
+    carry: ['Data governance', 'AI-ready metadata', 'Human-in-the-loop AI'],
   },
 ];
