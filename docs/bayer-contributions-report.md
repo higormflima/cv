@@ -2,7 +2,7 @@
 
 **Period:** March 2026 – November 2026 · **Title:** Data Analyst · **Location:** Warsaw
 
-> Public, sanitized version. Colleague names, internal URLs, repository links, business figures and internal platform, project, product, team and event names are removed or replaced with generic descriptions. The enterprise program UCL (Unified Consumption Layer) is named. Publicly available vendor tools (Databricks, GitHub, Cursor, Copilot and similar) are named. Every statement below is traceable to a GitHub issue, pull request, review or comment I authored.
+> Public, sanitized version. Colleague names, internal URLs, repository links, business figures and internal platform, project, product, team and event names are removed or replaced with generic descriptions. The enterprise program UCL (Unified Consumption Layer) and the Week of Stars event are named. Publicly available vendor tools (Databricks, GitHub, Cursor, Copilot and similar) are named. Every statement below is traceable to a GitHub issue, pull request, review or comment I authored.
 
 ---
 
@@ -27,7 +27,7 @@ Bayer runs on **Dynamic Shared Ownership (DSO)**: people join the missions where
 | **Consumer core data asset team** | Mar 2026 – present | Data analyst · Scrum master · Project coordinator | Rebuilt the asset wiki and data catalog. Built the team's Azure DevOps board and ran its scrum ceremonies. Owned the asset's metadata artifacts. |
 | **Talk-to-Data platform pilot** | Apr – Jun 2026 | Data analyst · AI solution tester | Turned marketing business questions into SQL. Built and validated Databricks Genie spaces with subject-matter experts. |
 | **Semantic-layer enablement squad** | Sep 2026 – present | Repo admin · Enablement lead for two core data assets · Reviewer | Set up repo governance, CI and the docs site. Onboarded teams. Delivered the first data products of a marketing analytics product family. Wrote design proposals. |
-| **UCL adoption squad** | Oct 2026 – present | Contributor · Technical writer · Front-end contributor | Promoted enterprise-wide UCL adoption. Wrote the UCL federated registry capability card and its adoption handover. Redesigned the UCL capability roadmap. |
+| **UCL adoption squad** | Jul 2026 – present | Contributor · Technical writer · Front-end contributor | Promoted enterprise-wide UCL adoption. Wrote the UCL federated registry capability card and its adoption handover. Redesigned the UCL capability roadmap. |
 
 ---
 
@@ -45,7 +45,7 @@ Bayer runs on **Dynamic Shared Ownership (DSO)**: people join the missions where
 | Deployment environments covered by IaC changes | 3 (development, quality assurance, production) |
 | Wiki pages cleaned up in a single PR | 79 files, 886 duplicated lines removed |
 | Golden-query test of an AI data product | 4 out of 4 passed, average weighted score 4.57 out of 5 |
-| Internal events where I presented | 2 (an internal technology conference and an internal company event) |
+| Internal events where I presented | 2 (an internal technology conference and Week of Stars) |
 
 ---
 
@@ -132,7 +132,7 @@ The engine compiles these into the registry's table and data-product JSON, and s
 - **Decision records in the repository.** Turned meetings and chats into issue comments with decisions, rationale, owners and actions, so decisions are traceable after the meeting.
 - **Status reporting.** Set up a recurring team-status cadence covering progress, risks and blockers, so the squad lead can report upward with current information.
 - **Governance by design.** Made sure data exposure, agent tooling and validation were reviewed and agreed before data products were published.
-- **Talks and decks.** Promoted enterprise-wide adoption of UCL at an internal technology conference (October), presented UCL and the semantic layer engine at an internal company event (November), and built a metadata-connections deck used in a leadership presentation.
+- **Talks and decks.** Promoted enterprise-wide adoption of UCL at an internal technology conference (October), presented UCL and the semantic layer engine at Week of Stars (November), and built a metadata-connections deck used in a leadership presentation.
 - **UCL portal (adoption squad).**
   - Wrote the UCL federated registry capability card and quick-start guide, and completed its adoption handover.
   - Linked its enablement resources following the UI conventions.
@@ -228,7 +228,7 @@ Described in decision 5.4: additive changes are optional and minor, breaking cha
 | Jul–Aug 2026 | Data catalog pages; architecture, roadmap and ingestion design docs; Mermaid → draw.io; 79-page navigation cleanup |
 | Sep 2026 | First metadata artifacts for the consumer core data asset in the semantic layer engine; issue forms and PR template; feature → main branching |
 | Oct 2026 | Joined the semantic-layer enablement squad; onboarded marketing, finance and partner teams; repo governance; interactive workflow diagram and GitHub Pages; internal conference talk; pillar data product decision; storage volumes in all three environments; registry capability card and roadmap |
-| Nov 2026 | First two pillar data products deployed; golden-query test 4/4; docs refresh, live previews, video, architecture diagrams; internal event talk; Semantic Quality Framework and Agent Skills proposals; native roadmap timeline |
+| Nov 2026 | First two pillar data products deployed; golden-query test 4/4; docs refresh, live previews, video, architecture diagrams; Week of Stars talk; Semantic Quality Framework and Agent Skills proposals; native roadmap timeline |
 
 ---
 

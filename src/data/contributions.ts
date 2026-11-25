@@ -39,6 +39,15 @@ export const missions: Mission[] = [
     delivered: 'Turned marketing business questions into SQL, compared AI assistants, and built and validated Databricks Genie spaces with subject-matter experts.',
   },
   {
+    id: 'adoption',
+    name: 'UCL adoption squad',
+    period: 'Jul 2026 – present',
+    start: '2026-07',
+    end: null,
+    roles: ['Contributor', 'Technical writer', 'Front-end contributor'],
+    delivered: 'Promoted enterprise-wide adoption of UCL (Unified Consumption Layer): wrote the UCL federated registry capability card and quick-start guide, and rebuilt the capability roadmap as a filterable release timeline.',
+  },
+  {
     id: 'semantic-layer',
     name: 'Semantic-layer enablement squad',
     period: 'Sep 2026 – present',
@@ -46,15 +55,6 @@ export const missions: Mission[] = [
     end: null,
     roles: ['Repo admin', 'Enablement lead', 'Reviewer'],
     delivered: 'Set up repository governance, CI and the docs site, onboarded six teams, delivered the first pillar data products and wrote design proposals.',
-  },
-  {
-    id: 'adoption',
-    name: 'UCL adoption squad',
-    period: 'Oct 2026 – present',
-    start: '2026-10',
-    end: null,
-    roles: ['Contributor', 'Technical writer', 'Front-end contributor'],
-    delivered: 'Promoted enterprise-wide adoption of UCL (Unified Consumption Layer): wrote the UCL federated registry capability card and quick-start guide, and rebuilt the capability roadmap as a filterable release timeline.',
   },
 ];
 
@@ -236,10 +236,20 @@ export const bayerTimeline = [
   { when: '2026-08', text: '13-section data catalog, design docs, Mermaid → draw.io, 79-page cleanup' },
   { when: '2026-09', text: 'First metadata artifacts in the semantic layer engine; issue forms, PR template, feature → main' },
   { when: '2026-10', text: 'Joined the enablement squad; repo governance; interactive workflow diagram; pillar data product decision; IaC volumes in 3 environments; first talk' },
-  { when: '2026-11', text: 'First 2 pillar data products deployed; golden queries 4/4; live docs previews; second talk; RFC-001 and RFC-002' },
+  { when: '2026-11', text: 'First 2 pillar data products deployed; golden queries 4/4; live docs previews; Week of Stars talk; RFC-001 and RFC-002' },
 ];
 
 export const talks = [
-  { title: 'Driving enterprise adoption of UCL (Unified Consumption Layer)', event: 'Internal technology conference', date: 'October 2026' },
-  { title: 'UCL adoption and the semantic layer engine', event: 'Internal company event', date: 'November 2026' },
+  {
+    title: 'Driving enterprise adoption of UCL (Unified Consumption Layer)',
+    event: 'Internal technology conference',
+    date: 'October 2026',
+    note: 'Made the case for enterprise-wide adoption of UCL as the shared layer for consuming governed data.',
+  },
+  {
+    title: 'UCL adoption and the semantic layer engine',
+    event: 'Week of Stars',
+    date: 'November 2026',
+    note: 'Showed how version-controlled documentation becomes AI-ready data products, published to UCL and queried by Talk-to-Data agents.',
+  },
 ];

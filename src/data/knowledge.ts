@@ -89,7 +89,7 @@ export const knowledge: KnowledgeChunk[] = [
   {
     kind: 'talk',
     title: 'Speaking',
-    text: talks.map((talk) => `${talk.title} — ${talk.event}, ${talk.date}`).join('; '),
+    text: talks.map((talk) => `${talk.title} — ${talk.event}, ${talk.date}. ${talk.note}`).join(' '),
     href: '/experience/#speaking',
   },
   {

@@ -112,7 +112,7 @@ Experienced in data transformation, analytics, data quality, data governance, me
 ## Education
 
 - **Mechanical Engineering**, São Paulo State University (UNESP), “Júlio de Mesquita Filho” · 2010–2018
-- **CNC Machinist Technology**, Serviço Nacional de Aprendizagem Industrial (SENAI) · 2004–2005
+- **Technician, CNC Machinist**, Serviço Nacional de Aprendizagem Industrial (SENAI) · 2004–2005
 
 ## Top Skills
 
@@ -147,4 +147,4 @@ Experienced in data transformation, analytics, data quality, data governance, me
 ## Speaking
 
 - Driving enterprise adoption of UCL (Unified Consumption Layer) — internal technology conference, October 2026
-- UCL adoption and the semantic layer engine — internal company event, November 2026
+- UCL adoption and the semantic layer engine — Week of Stars, November 2026

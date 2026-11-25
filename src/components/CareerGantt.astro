@@ -36,10 +36,10 @@ const rows: Row[] = [
     end: toYears(role.end),
     current: role.end === null,
   })),
-  ...education.map((item, index) => ({
+  ...education.map((item) => ({
     id: 'education',
     label: item.short,
-    sub: item.qualification,
+    sub: item.subtitle,
     dates: item.dates,
     track: 'education' as const,
     start: toYears(item.start),

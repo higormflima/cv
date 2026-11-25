@@ -60,6 +60,7 @@ import { base } from '../lib/paths';
             <span class="track-badge mono">{talk.date}</span>
             <h3>{talk.title}</h3>
             <p>{talk.event} · Bayer</p>
+            <p class="talk-note">{talk.note}</p>
           </article>
         ))}
       </div>
@@ -69,4 +70,5 @@ import { base } from '../lib/paths';
 
 <style>
   .role-links { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin: 0 0 1rem; font-size: .9rem; }
+  .talk-note { margin-top: .6rem !important; color: var(--text-mute) !important; font-size: .84rem !important; }
 </style>
