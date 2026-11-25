@@ -1,21 +1,35 @@
-<canvas class="hero-canvas" data-hero-canvas aria-hidden="true"></canvas>
+﻿<canvas class="hero-canvas" data-hero-canvas aria-hidden="true"></canvas>
 
 <script>
+  // Animated clustered knowledge graph: lime hub nodes, drifting grey satellites,
+  // dashed hub-to-hub links with "signals" travelling along them.
   const canvas = document.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
   const ctx = canvas?.getContext('2d');
 
   if (canvas && ctx) {
-    type Particle = { x: number; baseY: number; lane: number; speed: number; phase: number; amp: number; size: number };
+    type Hub = { x: number; y: number; r: number; phase: number };
+    type Sat = { hub: number; angle: number; dist: number; speed: number; wobble: number; r: number; x: number; y: number };
+    type Signal = { a: number; b: number; t: number; speed: number };
+
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let width = 0;
     let height = 0;
-    let lanes = 0;
-    let particles: Particle[] = [];
+    let hubs: Hub[] = [];
+    let sats: Sat[] = [];
+    let hubLinks: [number, number][] = [];
+    let signals: Signal[] = [];
     let raf = 0;
     let running = false;
     let time = 0;
+    let activeHub = -1;
     const pointer = { x: -9999, y: -9999 };
     let colors = { raw: [163, 175, 187], on: [198, 244, 50] };
+
+    let seed = 42;
+    const rand = () => {
+      seed = (seed * 16807) % 2147483647;
+      return seed / 2147483647;
+    };
 
     const readColors = () => {
       const style = getComputedStyle(document.documentElement);
@@ -25,21 +39,57 @@
       };
       colors = { raw: parse('--particle', colors.raw), on: parse('--particle-on', colors.on) };
     };
+    const rgba = (rgb: number[], a: number) => `rgb(${rgb.join(' ')} / ${Math.max(0, Math.min(1, a)).toFixed(3)})`;
+    type Box = { l: number; t: number; r: number; b: number };
+    let textBox: Box | null = null;
+    let photoBox: Box | null = null;
+    const inside = (box: Box | null, x: number, y: number, pad = 0) => !!box && x > box.l - pad && x < box.r + pad && y > box.t - pad && y < box.b + pad;
+    // Dim nodes behind the copy so text stays readable.
+    const fade = (x: number, y: number) => (inside(textBox, x, y, 8) ? 0.18 : 1);
 
-    const smoothstep = (a: number, b: number, x: number) => {
-      const t = Math.min(Math.max((x - a) / (b - a), 0), 1);
-      return t * t * (3 - 2 * t);
+    const measure = () => {
+      const origin = canvas.getBoundingClientRect();
+      const box = (selector: string): Box | null => {
+        const el = canvas.parentElement?.querySelector(selector);
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        return { l: r.left - origin.left, t: r.top - origin.top, r: r.right - origin.left, b: r.bottom - origin.top };
+      };
+      textBox = box('.hero-copy');
+      photoBox = box('.hero-portrait');
     };
 
-    const spawn = (x = Math.random() * width): Particle => ({
-      x,
-      baseY: Math.random() * height,
-      lane: Math.floor(Math.random() * lanes),
-      speed: 0.25 + Math.random() * 0.55,
-      phase: Math.random() * Math.PI * 2,
-      amp: 10 + Math.random() * 26,
-      size: 0.8 + Math.random() * 1.2,
-    });
+    const build = () => {
+      seed = 42;
+      measure();
+      const count = Math.max(4, Math.min(9, Math.round(width / 190)));
+      const minGap = Math.max(120, Math.min(width, height) * 0.2);
+      hubs = [];
+      for (let tries = 0; hubs.length < count && tries < 1500; tries++) {
+        const x = width * (0.03 + rand() * 0.94);
+        const y = height * (0.1 + rand() * 0.8);
+        if (inside(textBox, x, y, 36) || inside(photoBox, x, y, 30)) continue;
+        if (hubs.every((h) => Math.hypot(h.x - x, h.y - y) > minGap)) hubs.push({ x, y, r: 5 + rand() * 4, phase: rand() * Math.PI * 2 });
+      }
+      sats = hubs.flatMap((hub, i) =>
+        Array.from({ length: 9 + Math.round(rand() * 7) }, () => ({
+          hub: i,
+          angle: rand() * Math.PI * 2,
+          dist: 26 + rand() * 70,
+          speed: (rand() - 0.5) * 0.0005,
+          wobble: rand() * Math.PI * 2,
+          r: 1.2 + rand() * 1.5,
+          x: 0,
+          y: 0,
+        })),
+      );
+      const maxLink = Math.max(width, height) * 0.4;
+      hubLinks = [];
+      hubs.forEach((a, i) => hubs.forEach((b, j) => {
+        if (j > i && Math.hypot(a.x - b.x, a.y - b.y) < maxLink) hubLinks.push([i, j]);
+      }));
+      signals = [];
+    };
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -49,76 +99,130 @@
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      lanes = Math.max(6, Math.floor(height / 34));
-      const count = Math.round(Math.min(Math.max((width * height) / 7000, 70), 220));
-      particles = Array.from({ length: count }, () => spawn());
+      build();
     };
-
-    const laneY = (lane: number) => ((lane + 0.5) / lanes) * height;
 
     const frame = () => {
       time += 16;
       ctx.clearRect(0, 0, width, height);
-      const positions: { x: number; y: number; b: number }[] = [];
 
-      for (const p of particles) {
-        if (!reduceMotion) p.x += p.speed;
-        if (p.x > width + 20) Object.assign(p, spawn(-20));
-        const b = smoothstep(width * 0.38, width * 0.68, p.x);
-        const rawY = p.baseY + Math.sin(time * 0.0009 * (1 + p.speed) + p.phase) * p.amp;
-        let y = rawY + (laneY(p.lane) - rawY) * b;
-        let x = p.x;
+      // Pointer: the nearest hub within reach lights up its cluster.
+      activeHub = -1;
+      let best = 140;
+      hubs.forEach((h, i) => {
+        const d = Math.hypot(h.x - pointer.x, h.y - pointer.y);
+        if (d < best) {
+          best = d;
+          activeHub = i;
+        }
+      });
+
+      for (const s of sats) {
+        const hub = hubs[s.hub];
+        if (!reduceMotion) s.angle += s.speed * 16;
+        const breathe = 1 + Math.sin(time * 0.0007 + s.wobble) * 0.08;
+        let x = hub.x + Math.cos(s.angle) * s.dist * breathe;
+        let y = hub.y + Math.sin(s.angle) * s.dist * breathe;
         const dx = x - pointer.x;
         const dy = y - pointer.y;
         const dist = Math.hypot(dx, dy);
-        if (dist < 110) {
-          const force = (1 - dist / 110) * 26;
-          x += (dx / (dist || 1)) * force;
-          y += (dy / (dist || 1)) * force;
+        if (dist < 90) {
+          const push = (1 - dist / 90) * 18;
+          x += (dx / (dist || 1)) * push;
+          y += (dy / (dist || 1)) * push;
         }
-        positions.push({ x, y, b });
+        s.x = x;
+        s.y = y;
       }
 
+      // Hub-to-hub links (dashed lime).
+      ctx.setLineDash([3, 6]);
+      ctx.lineWidth = 1.1;
+      for (const [i, j] of hubLinks) {
+        const a = hubs[i];
+        const b = hubs[j];
+        const lit = i === activeHub || j === activeHub;
+        ctx.strokeStyle = rgba(colors.on, (lit ? 0.5 : 0.2) * Math.min(fade(a.x, a.y), fade(b.x, b.y), fade((a.x + b.x) / 2, (a.y + b.y) / 2)));
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+
+      // Satellite spokes and intra-cluster links.
       ctx.lineWidth = 1;
-      for (let i = 0; i < positions.length; i++) {
-        const a = positions[i];
-        if (a.b > 0.4) continue;
-        for (let j = i + 1; j < positions.length; j++) {
-          const c = positions[j];
-          if (c.b > 0.4) continue;
-          const d = Math.hypot(a.x - c.x, a.y - c.y);
-          if (d < 70) {
-            ctx.strokeStyle = `rgb(${colors.raw.join(' ')} / ${(1 - d / 70) * 0.16 * (1 - a.b * 2)})`;
+      for (const s of sats) {
+        const hub = hubs[s.hub];
+        const lit = s.hub === activeHub;
+        ctx.strokeStyle = lit ? rgba(colors.on, 0.35 * fade(s.x, s.y)) : rgba(colors.raw, 0.16 * fade(s.x, s.y));
+        ctx.beginPath();
+        ctx.moveTo(hub.x, hub.y);
+        ctx.lineTo(s.x, s.y);
+        ctx.stroke();
+      }
+      for (let i = 0; i < sats.length; i++) {
+        for (let j = i + 1; j < sats.length; j++) {
+          const a = sats[i];
+          const b = sats[j];
+          if (a.hub !== b.hub) continue;
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < 36) {
+            ctx.strokeStyle = rgba(colors.raw, (1 - d / 36) * 0.14 * fade(a.x, a.y));
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
-            ctx.lineTo(c.x, c.y);
+            ctx.lineTo(b.x, b.y);
             ctx.stroke();
           }
         }
       }
 
-      for (const pos of positions) {
-        const [r1, g1, b1] = colors.raw;
-        const [r2, g2, b2] = colors.on;
-        const mix = (from: number, to: number) => Math.round(from + (to - from) * pos.b);
-        const rgb = `${mix(r1, r2)} ${mix(g1, g2)} ${mix(b1, b2)}`;
-        if (pos.b > 0.05) {
-          const trail = 26 * pos.b;
-          const gradient = ctx.createLinearGradient(pos.x - trail, pos.y, pos.x, pos.y);
-          gradient.addColorStop(0, `rgb(${rgb} / 0)`);
-          gradient.addColorStop(1, `rgb(${rgb} / ${0.55 * pos.b})`);
-          ctx.strokeStyle = gradient;
-          ctx.lineWidth = 1.4;
-          ctx.beginPath();
-          ctx.moveTo(pos.x - trail, pos.y);
-          ctx.lineTo(pos.x, pos.y);
-          ctx.stroke();
-        }
-        ctx.fillStyle = `rgb(${rgb} / ${0.35 + pos.b * 0.6})`;
+      for (const s of sats) {
+        const lit = s.hub === activeHub;
+        ctx.fillStyle = lit ? rgba(colors.on, 0.85 * fade(s.x, s.y)) : rgba(colors.raw, 0.55 * fade(s.x, s.y));
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 1.1 + pos.b * 0.9, 0, Math.PI * 2);
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
       }
+
+      // Signals travelling between hubs.
+      if (!reduceMotion && hubLinks.length && signals.length < 4 && Math.random() < 0.02) {
+        const [a, b] = hubLinks[Math.floor(Math.random() * hubLinks.length)];
+        signals.push(Math.random() < 0.5 ? { a, b, t: 0, speed: 0.006 + Math.random() * 0.006 } : { a: b, b: a, t: 0, speed: 0.006 + Math.random() * 0.006 });
+      }
+      signals = signals.filter((sig) => sig.t <= 1);
+      for (const sig of signals) {
+        sig.t += sig.speed;
+        const a = hubs[sig.a];
+        const b = hubs[sig.b];
+        const x = a.x + (b.x - a.x) * sig.t;
+        const y = a.y + (b.y - a.y) * sig.t;
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, 7);
+        glow.addColorStop(0, rgba(colors.on, 0.9 * fade(x, y)));
+        glow.addColorStop(1, rgba(colors.on, 0));
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, y, 7, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Hubs with a slowly rotating dashed ring.
+      hubs.forEach((h, i) => {
+        const f = fade(h.x, h.y);
+        const lit = i === activeHub;
+        const pulse = reduceMotion ? 0 : Math.sin(time * 0.002 + h.phase);
+        ctx.setLineDash([2, 4]);
+        ctx.lineDashOffset = reduceMotion ? 0 : -time * 0.01;
+        ctx.strokeStyle = rgba(colors.on, (lit ? 0.7 : 0.35) * f);
+        ctx.beginPath();
+        ctx.arc(h.x, h.y, h.r + 7 + pulse * 1.5 + (lit ? 3 : 0), 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = rgba(colors.on, 0.95 * f);
+        ctx.beginPath();
+        ctx.arc(h.x, h.y, h.r + (lit ? 1.5 : 0), 0, Math.PI * 2);
+        ctx.fill();
+      });
 
       if (running) raf = requestAnimationFrame(frame);
     };
@@ -151,9 +255,11 @@
       const rect = canvas.getBoundingClientRect();
       pointer.x = event.clientX - rect.left;
       pointer.y = event.clientY - rect.top;
+      if (reduceMotion) frame();
     });
     canvas.parentElement?.addEventListener('pointerleave', () => {
       pointer.x = pointer.y = -9999;
+      if (reduceMotion) frame();
     });
   }
 </script>

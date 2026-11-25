@@ -1,4 +1,4 @@
-# Higor Lima — Personal CV
+﻿# Higor Lima — Personal CV
 
 A lightweight, static CV website built with Astro and configured for GitHub Pages at `https://higormflima.github.io/cv/`.
 
@@ -29,7 +29,7 @@ Astro writes the static site to `dist/`. The GitHub Actions workflow in `.github
 ## Features
 
 - Dark theme by default with a light toggle (`src/lib/theme.ts`).
-- Animated "raw data → structured value" hero canvas (`src/components/HeroCanvas.astro`); all motion respects `prefers-reduced-motion`.
+- Animated clustered knowledge-graph hero canvas (`src/components/HeroCanvas.astro`); all motion respects `prefers-reduced-motion`.
 - KPI strip (`src/data/metrics.ts`): every number must be traceable to the CV data.
 - Career Gantt chart (`src/components/CareerGantt.astro`) built from `start`/`end`/`track` in `src/data/experience.ts` and `src/data/education.ts`.
 - Skills knowledge graph (`src/components/SkillGraph.astro`): the layout is computed at build time in `src/lib/graph.ts`, and edges come from each role's `stack`.
