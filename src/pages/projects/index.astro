@@ -1,31 +1,40 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import { profile } from '../../data/profile';
+import { base } from '../../lib/paths';
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const projects = [
+  {
+    href: '/projects/enterprise-data-integration/',
+    kind: 'case study · business analysis',
+    title: 'Enterprise Data Integration',
+    text: 'Requirements, field mapping and transformation rules that connect separate business systems into a shared data model.',
+    tags: ['requirements', 'data mapping', 'transformation rules', 'data model'],
+  },
+  {
+    href: '/projects/odisseia-mundana/',
+    kind: 'personal project · astro + github pages',
+    title: 'Odisseia Mundana',
+    text: 'A travel magazine and knowledge hub, a motorhome built by hand, and a browser-based electrical planner that generates PDF reports.',
+    tags: ['astro', 'content modeling', 'ci/cd', 'pdf generation'],
+  },
+];
 ---
 
-<SiteLayout title="Projects | Higor Lima" description="Selected project work and project placeholders for Higor Lima.">
+<SiteLayout title="Projects | Higor Lima" description="Selected projects by Higor Lima: an enterprise data integration case study and the Odisseia Mundana travel project.">
   <section class="page-shell interior-page">
-    <p class="eyebrow"><span class="eyebrow-dot"></span> 04 · Projects</p>
-    <h1>Ideas in<br /><em>the making.</em></h1>
-    <p class="page-lead">A generalized case study is presented below. More project stories can be added as material is ready.</p>
-    <a class="featured-project" href={`${base}/projects/enterprise-data-integration/`}>
-      <span class="eyebrow">Business analysis · Data integration</span>
-      <h2>Enterprise Data Integration</h2>
-      <span class="featured-arrow" aria-hidden="true">↗</span>
-      <p>Requirements, data mapping, and transformation rules for a multi-system data initiative.</p>
-    </a>
-    <a class="featured-project" href={`${base}/projects/odisseia-mundana/`}>
-      <span class="eyebrow">Personal project · Travel magazine</span>
-      <h2>Odisseia Mundana</h2>
-      <span class="featured-arrow" aria-hidden="true">↗</span>
-      <p>A long-running pet project and a passion for life: travel stories, practical guides, and a motorhome built by hand.</p>
-    </a>
-    <div class="placeholder-panel">
-      <span class="placeholder-label">Placeholder</span>
-      <h2>More project stories to come.</h2>
-      <p>Placeholder: add other project descriptions, your role, outcomes, images, and links.</p>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>// 04 projects</p>
+    <h1 class="page-title">Selected <span class="gradient-text">work.</span></h1>
+    <p class="page-lead">Case studies told with lineage diagrams: where the data came from, what happened to it, and who used the result.</p>
+    <div class="project-grid">
+      {projects.map((project, index) => (
+        <a class="project-card card card-glow" href={`${base}${project.href}`} data-reveal style={`--reveal-delay:${index * 80}ms`}>
+          <span class="eyebrow" style="margin-bottom:.5rem">{project.kind}</span>
+          <h2>{project.title}</h2>
+          <p>{project.text}</p>
+          <ul class="chip-row" style="list-style:none;padding:0;margin:auto 0 0">{project.tags.map((tag) => <li class="chip">#{tag}</li>)}</ul>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
     </div>
   </section>
 </SiteLayout>

@@ -1,16 +1,75 @@
-:root {
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #07090d;
+  --bg-elev: #0b0f15;
+  --surface: #0f151d;
+  --surface-2: #151d27;
+  --line: rgb(255 255 255 / 8%);
+  --line-strong: rgb(255 255 255 / 16%);
+  --text: #e9eef3;
+  --text-soft: #a3afbb;
+  --text-mute: #6d7a87;
+  --accent: #c6f432;
+  --accent-fill: #c6f432;
+  --accent-ink: #0a0d12;
+  --accent-2: #3ee6ff;
+  --accent-3: #a78bfa;
+  --accent-4: #ffb547;
+  --glow: rgb(198 244 50 / 28%);
+  --grid: rgb(255 255 255 / 3.5%);
+  --code-key: #3ee6ff;
+  --code-string: #c6f432;
+  --code-number: #ffb547;
+  --code-literal: #a78bfa;
+  --code-punct: #6d7a87;
+  --shadow: 0 24px 60px -24px rgb(0 0 0 / 70%);
+  --particle: 163 175 187;
+  --particle-on: 198 244 50;
+}
+
+[data-theme='light'] {
   color-scheme: light;
-  --paper: #f5f4ef;
-  --paper-deep: #eceae2;
-  --ink: #192521;
-  --ink-soft: #53625b;
-  --forest: #24483a;
-  --forest-dark: #18382d;
-  --lime: #d5e59a;
-  --line: #d4d4ca;
-  --white: #fffefa;
-  --serif: Georgia, 'Times New Roman', serif;
-  --sans: 'Aptos', 'Segoe UI', sans-serif;
-  --content-width: 1160px;
-  --page-gutter: clamp(1.25rem, 5.5vw, 5rem);
+  --bg: #f5f7f2;
+  --bg-elev: #eef1ea;
+  --surface: #ffffff;
+  --surface-2: #f0f3ec;
+  --line: rgb(10 20 15 / 10%);
+  --line-strong: rgb(10 20 15 / 20%);
+  --text: #0c1411;
+  --text-soft: #46534d;
+  --text-mute: #6b7872;
+  --accent: #4a7200;
+  --accent-fill: #c6f432;
+  --accent-ink: #0a0d12;
+  --accent-2: #0a7f99;
+  --accent-3: #6d4fd8;
+  --accent-4: #b46a00;
+  --glow: rgb(120 170 0 / 22%);
+  --grid: rgb(10 20 15 / 4.5%);
+  --code-key: #0a7f99;
+  --code-string: #4a7200;
+  --code-number: #b46a00;
+  --code-literal: #6d4fd8;
+  --code-punct: #7b8781;
+  --shadow: 0 24px 60px -30px rgb(20 40 30 / 30%);
+  --particle: 90 105 98;
+  --particle-on: 74 114 0;
+}
+
+:root {
+  --sans: 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
+  --mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', Consolas, monospace;
+  --content-width: 1200px;
+  --page-gutter: clamp(1.25rem, 5vw, 4rem);
+  --radius: 14px;
+  --radius-sm: 8px;
+  --track-data: #c6f432;
+  --track-quality: #3ee6ff;
+  --track-engineering: #a78bfa;
+  --track-military: #ffb547;
+  --track-education: #6d7a87;
 }

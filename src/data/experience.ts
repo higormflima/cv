@@ -1,8 +1,44 @@
-export const experience = [
+export type Track = 'military' | 'engineering' | 'quality' | 'data';
+
+export interface Role {
+  id: string;
+  organization: string;
+  location: string;
+  dates: string;
+  /** ISO year-month, used by the career Gantt chart. */
+  start: string;
+  /** ISO year-month, or null for the current role. */
+  end: string | null;
+  track: Track;
+  stack?: string[];
+  role: string;
+  highlights: string[];
+}
+
+export const trackLabels: Record<Track, string> = {
+  military: 'Military & aviation',
+  engineering: 'Engineering',
+  quality: 'Quality & testing',
+  data: 'Data & analytics',
+};
+
+/** Role titles without inline date ranges; promotions are joined with an arrow. */
+export const shortRole = (role: Pick<Role, 'role'>) =>
+  role.role
+    .split(';')
+    .map((part) => part.split(' (')[0].trim())
+    .join(' → ');
+
+export const experience: Role[] = [
   {
+    id: 'bayer',
     organization: 'Bayer',
     location: 'Warsaw, Mazowieckie, Poland',
     dates: 'March 2026 – Present',
+    start: '2026-03',
+    end: null,
+    track: 'data',
+    stack: ['Data governance', 'Data quality', 'Metadata', 'Data transformation', 'Technical documentation', 'Stakeholder communication'],
     role: 'Data Analyst',
     highlights: [
       'Contribute to the development and governance of core consumer data assets, supporting completeness, quality, and analytical value across business domains.',
@@ -13,9 +49,14 @@ export const experience = [
     ],
   },
   {
+    id: 'chubb',
     organization: 'Chubb Fire & Security',
     location: 'Warsaw, Mazowieckie, Poland',
     dates: 'July 2025 – December 2025',
+    start: '2025-07',
+    end: '2025-12',
+    track: 'data',
+    stack: ['Requirements analysis', 'Data modeling', 'Data transformation', 'User acceptance testing', 'Stakeholder communication'],
     role: 'Business Analyst',
     highlights: [
       'Supported data transformation initiatives and translated stakeholder needs into business and functional requirements.',
@@ -25,9 +66,14 @@ export const experience = [
     ],
   },
   {
+    id: 'reckitt',
     organization: 'Reckitt',
     location: 'Warsaw, Mazowieckie, Poland',
     dates: 'May 2024 – April 2025',
+    start: '2024-05',
+    end: '2025-04',
+    track: 'data',
+    stack: ['Google BigQuery', 'Databricks', 'Power BI', 'Agile', 'Scrum', 'Media analytics', 'User acceptance testing'],
     role: 'Senior Business Analyst',
     highlights: [
       'Collaborated with product managers, engineers, data scientists, developers, and stakeholders to build and maintain data streams for marketing and sales analytics.',
@@ -38,9 +84,14 @@ export const experience = [
     ],
   },
   {
+    id: 'capgemini',
     organization: 'Capgemini (supporting Unilever)',
     location: 'Warsaw, Mazowieckie, Poland',
     dates: 'February 2023 – May 2024',
+    start: '2023-02',
+    end: '2024-05',
+    track: 'data',
+    stack: ['Power BI', 'Dataiku', 'Google Analytics', 'Jira', 'Agile', 'Media analytics', 'Business intelligence', 'Excel', 'PowerPoint'],
     role: 'Business Data Analyst (February 2023 – February 2024); Business Intelligence Consultant (February 2024 – May 2024)',
     highlights: [
       'Analyzed data from more than 15 sources, including digital media, consumer reviews, and market research, to support global brand teams.',
@@ -50,9 +101,14 @@ export const experience = [
     ],
   },
   {
+    id: 'accenture',
     organization: 'Accenture',
     location: 'Warsaw, Mazowieckie, Poland',
     dates: 'April 2021 – February 2023',
+    start: '2021-04',
+    end: '2023-02',
+    track: 'data',
+    stack: ['Data analysis'],
     role: 'Data Analyst',
     highlights: [
       'Analyzed operational performance, conducted root cause analysis, and developed metrics to answer business questions.',
@@ -60,9 +116,14 @@ export const experience = [
     ],
   },
   {
+    id: 'testronic',
     organization: 'Testronic',
     location: 'Warsaw, Mazowieckie, Poland',
     dates: 'October 2020 – April 2021',
+    start: '2020-10',
+    end: '2021-04',
+    track: 'quality',
+    stack: ['Technical documentation'],
     role: 'Quality Assurance Specialist',
     highlights: [
       'Tested more than 20 software applications on gaming platforms for localization and functionality.',
@@ -71,9 +132,13 @@ export const experience = [
     ],
   },
   {
+    id: 'ifi',
     organization: 'IFI — Instituto de Fomento e Coordenação Industrial',
     location: 'São José dos Campos, São Paulo, Brazil',
     dates: 'August 2015 – September 2017',
+    start: '2015-08',
+    end: '2017-09',
+    track: 'engineering',
     role: 'Aeronautical Product Certifier',
     highlights: [
       'Certified six aeronautical systems for aircraft programs, including KC-390 and Gripen.',
@@ -81,9 +146,13 @@ export const experience = [
     ],
   },
   {
+    id: 'gerdau',
     organization: 'Gerdau',
     location: 'Pindamonhangaba, São Paulo, Brazil',
     dates: 'April 2014 – August 2015',
+    start: '2014-04',
+    end: '2015-08',
+    track: 'engineering',
     role: 'Mechanical Engineering Intern',
     highlights: [
       'Tested and implemented tools to improve rolling mill machining processes.',
@@ -91,18 +160,26 @@ export const experience = [
     ],
   },
   {
+    id: 'maxion',
     organization: 'Maxion Structural Components',
     location: 'Cruzeiro, São Paulo, Brazil',
     dates: 'December 2013 – April 2014',
+    start: '2013-12',
+    end: '2014-04',
+    track: 'engineering',
     role: 'Quality Engineering Intern',
     highlights: [
       'Supported quality engineering for truck structural components and assembly, including dimensional analysis, statistical control, and technical documentation.',
     ],
   },
   {
+    id: 'army',
     organization: 'Brazilian Army',
     location: 'Manaus, Amazonas, Brazil',
     dates: 'July 2006 – December 2012',
+    start: '2006-07',
+    end: '2012-12',
+    track: 'military',
     role: 'Platoon Sergeant',
     highlights: [
       'Led small teams in more than 30 missions and accumulated over 500 hours as a flight mechanic on helicopter models in the Brazilian Amazon.',

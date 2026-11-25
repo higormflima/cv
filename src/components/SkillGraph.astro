@@ -1,0 +1,164 @@
+---
+import { buildSkillGraph } from '../lib/graph';
+
+const { nodes, edges, viewBox } = buildSkillGraph();
+const byId = new Map(nodes.map((n) => [n.id, n]));
+const roles = nodes.filter((n) => n.kind === 'role');
+---
+
+<figure class="skill-graph card" data-skill-graph data-reveal>
+  <figcaption class="graph-head">
+    <span class="comment">// skills.graph — {nodes.length} nodes · {edges.length} edges · hover, focus or filter</span>
+    <div class="graph-filters" role="group" aria-label="Highlight the stack used at">
+      <button type="button" class="chip" data-filter="" aria-pressed="true">all</button>
+      {roles.map((role) => <button type="button" class="chip" data-filter={role.id} aria-pressed="false">{role.label}</button>)}
+    </div>
+  </figcaption>
+  <div class="graph-stage">
+    <svg viewBox={viewBox} role="img" aria-labelledby="graph-title graph-desc">
+      <title id="graph-title">Skills knowledge graph</title>
+      <desc id="graph-desc">Skills are connected to their practice area and to the companies where Higor used them. The same information is listed below the graph.</desc>
+      <g class="edges">
+        {edges.map((edge) => {
+          const a = byId.get(edge.source)!;
+          const b = byId.get(edge.target)!;
+          return <line class={`edge edge-${edge.kind}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} data-a={edge.source} data-b={edge.target} />;
+        })}
+      </g>
+      <g class="nodes">
+        {nodes.map((node) => (
+          <g class={`node node-${node.kind}`} transform={`translate(${node.x} ${node.y})`} data-id={node.id} data-label={node.label} data-kind={node.kind} tabindex="0" role="button" aria-label={`${node.label} (${node.kind === 'role' ? 'company' : node.kind === 'group' ? 'practice area' : 'skill'})`}>
+            {node.kind === 'role' && <circle class="halo" r={node.r + 8} />}
+            <circle r={node.r} />
+            <text y={node.r + 13} text-anchor="middle">{node.label}</text>
+          </g>
+        ))}
+      </g>
+    </svg>
+    <aside class="graph-info" data-graph-info aria-live="polite">
+      <p class="info-kind mono">select a node</p>
+      <p class="info-title">Explore the graph</p>
+      <p class="info-body">Lime nodes are companies, cyan nodes are practice areas, and small nodes are tools and skills. Hover over one to see its connections.</p>
+    </aside>
+  </div>
+  <ul class="graph-legend mono" aria-hidden="true">
+    <li class="lg-role">company</li><li class="lg-group">practice area</li><li class="lg-skill">skill / tool</li>
+  </ul>
+</figure>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-skill-graph]');
+  if (root) {
+    const svg = root.querySelector('svg')!;
+    const info = root.querySelector<HTMLElement>('[data-graph-info]')!;
+    const nodes = [...root.querySelectorAll<SVGGElement>('.node')];
+    const edges = [...root.querySelectorAll<SVGLineElement>('.edge')];
+    const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const neighbours = new Map<string, Set<string>>();
+    edges.forEach((edge) => {
+      const { a, b } = edge.dataset as { a: string; b: string };
+      if (!neighbours.has(a)) neighbours.set(a, new Set());
+      if (!neighbours.has(b)) neighbours.set(b, new Set());
+      neighbours.get(a)!.add(b);
+      neighbours.get(b)!.add(a);
+    });
+    const labelOf = (id: string) => nodes.find((n) => n.dataset.id === id)?.dataset.label ?? id;
+    const kindLabel: Record<string, string> = { role: 'company', group: 'practice area', skill: 'skill / tool' };
+    let pinned: string | null = null;
+
+    const highlight = (id: string | null) => {
+      if (!id) {
+        svg.classList.remove('has-focus');
+        nodes.forEach((n) => n.classList.remove('is-lit', 'is-active'));
+        edges.forEach((e) => e.classList.remove('is-lit'));
+        return;
+      }
+      const lit = new Set([id, ...(neighbours.get(id) ?? [])]);
+      svg.classList.add('has-focus');
+      nodes.forEach((n) => {
+        n.classList.toggle('is-lit', lit.has(n.dataset.id!));
+        n.classList.toggle('is-active', n.dataset.id === id);
+      });
+      edges.forEach((e) => e.classList.toggle('is-lit', e.dataset.a === id || e.dataset.b === id));
+
+      const node = nodes.find((n) => n.dataset.id === id)!;
+      const kind = node.dataset.kind!;
+      const connected = [...(neighbours.get(id) ?? [])];
+      const companies = connected.filter((n) => n.startsWith('r-')).map(labelOf);
+      const groups = connected.filter((n) => n.startsWith('g-')).map(labelOf);
+      const skills = connected.filter((n) => n.startsWith('s-')).map(labelOf);
+      info.querySelector('.info-kind')!.textContent = `${kindLabel[kind]} · ${connected.length} connections`;
+      info.querySelector('.info-title')!.textContent = node.dataset.label!;
+      info.querySelector('.info-body')!.textContent =
+        kind === 'skill'
+          ? `${groups.length ? `Area: ${groups.join(', ')}. ` : ''}${companies.length ? `Used at: ${companies.join(', ')}.` : 'Listed in the CV skill set.'}`
+          : `${kind === 'role' ? 'Stack' : 'Includes'}: ${skills.join(', ')}.`;
+    };
+
+    nodes.forEach((node) => {
+      const id = node.dataset.id!;
+      node.addEventListener('mouseenter', () => !pinned && highlight(id));
+      node.addEventListener('mouseleave', () => !pinned && highlight(null));
+      node.addEventListener('focus', () => highlight(id));
+      node.addEventListener('blur', () => !pinned && highlight(null));
+      node.addEventListener('click', () => {
+        pinned = pinned === id ? null : id;
+        highlight(pinned ?? id);
+      });
+      node.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          node.dispatchEvent(new Event('click'));
+        }
+      });
+    });
+    filters.forEach((button) =>
+      button.addEventListener('click', () => {
+        filters.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+        pinned = button.dataset.filter || null;
+        highlight(pinned);
+      }),
+    );
+  }
+</script>
+
+<style>
+  .skill-graph { margin: 0 0 1rem; padding: 1.25rem; overflow: hidden; }
+  .graph-head { display: grid; gap: .9rem; margin-bottom: .75rem; }
+  .graph-filters { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .graph-filters .chip { cursor: pointer; }
+  .graph-filters .chip[aria-pressed='true'] { border-color: var(--accent); background: color-mix(in srgb, var(--accent-fill) 14%, transparent); color: var(--text); }
+  .graph-stage { position: relative; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .edge { stroke: var(--line-strong); stroke-width: 1; transition: stroke .2s ease, opacity .2s ease, stroke-width .2s ease; }
+  .edge-role { stroke-dasharray: 3 4; opacity: .55; }
+  .node { cursor: pointer; outline: none; transition: opacity .2s ease; }
+  .node circle { fill: var(--surface-2); stroke: var(--text-mute); stroke-width: 1.2; transition: fill .2s ease, stroke .2s ease; }
+  .node text { fill: var(--text-soft); font: 500 11px var(--sans); paint-order: stroke; stroke: var(--bg-elev); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+  .node-group circle { fill: color-mix(in srgb, var(--accent-2) 25%, var(--surface)); stroke: var(--accent-2); stroke-width: 2; }
+  .node-group text { fill: var(--accent-2); font-size: 13px; font-weight: 700; }
+  .node-role circle { fill: var(--accent-fill); stroke: var(--accent-fill); }
+  .node-role .halo { fill: none; stroke: color-mix(in srgb, var(--accent-fill) 40%, transparent); stroke-dasharray: 2 4; animation: spin 18s linear infinite; }
+  .node-role text { fill: var(--text); font-size: 12.5px; font-weight: 700; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  svg:global(.has-focus) .node:not(:global(.is-lit)) { opacity: .18; }
+  svg:global(.has-focus) .edge:not(:global(.is-lit)) { opacity: .06; }
+  .edge:global(.is-lit) { stroke: var(--accent); stroke-width: 1.6; opacity: 1; }
+  .node:global(.is-active) circle { stroke: var(--accent); stroke-width: 3; }
+  .node:focus-visible circle { stroke: var(--accent); stroke-width: 3; }
+  .graph-info { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: .1rem 1rem; margin-top: .5rem; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--bg) 50%, transparent); }
+  .graph-info p { margin: 0; }
+  .info-kind { grid-column: 1 / -1; color: var(--accent); font-size: .68rem; }
+  .info-title { font-weight: 650; }
+  .info-body { color: var(--text-soft); font-size: .84rem; line-height: 1.5; }
+  .graph-legend { display: flex; gap: 1.2rem; margin: .75rem 0 0; padding: 0; list-style: none; color: var(--text-mute); font-size: .68rem; }
+  .graph-legend li::before { display: inline-block; width: .6rem; height: .6rem; margin-right: .4rem; border-radius: 50%; content: ''; vertical-align: -1px; }
+  .lg-role::before { background: var(--accent-fill); }
+  .lg-group::before { background: var(--accent-2); }
+  .lg-skill::before { border: 1px solid var(--text-mute); background: var(--surface-2); }
+  @media (max-width: 760px) {
+    .graph-stage { overflow-x: auto; }
+    svg { min-width: 760px; }
+    .graph-info { grid-template-columns: 1fr; }
+  }
+</style>

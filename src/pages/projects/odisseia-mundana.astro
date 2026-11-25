@@ -1,9 +1,17 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import LineageDiagram from '../../components/LineageDiagram.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const projectSite = 'https://odisseiamundana.com/pt/';
 const projectRepository = 'https://github.com/higormflima/odisseiamundana';
+const lineage = [
+  { label: 'Inputs', nodes: ['Journeys', 'Media', 'Motorhome build'] },
+  { label: 'Structure', nodes: ['Content model', 'Journey data'] },
+  { label: 'Build', nodes: ['Astro site', 'Validation'], highlight: true },
+  { label: 'Publish', nodes: ['GitHub Pages'] },
+  { label: 'Readers', nodes: ['Magazine', 'Guides', 'PDF planner'] },
+];
 ---
 
 <SiteLayout
@@ -11,14 +19,16 @@ const projectRepository = 'https://github.com/higormflima/odisseiamundana';
   description="Odisseia Mundana is Higor Lima's personal travel project and passion for life, built around travel stories, practical guides, and a handcrafted motorhome."
 >
   <article class="page-shell interior-page project-case">
-    <p class="eyebrow"><span class="eyebrow-dot"></span> Personal project · Travel and exploration</p>
-    <h1>Odisseia<br /><em>Mundana.</em></h1>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>// personal project · travel and exploration</p>
+    <h1 class="page-title">Odisseia <span class="gradient-text">Mundana.</span></h1>
     <p class="page-lead">A pet project and a passion for life: a travel magazine and knowledge hub shaped by real journeys, practical research, and making things by hand.</p>
 
-    <div class="project-facts" aria-label="Project summary">
+    <div class="project-facts card" aria-label="Project summary">
       <div><span>My contribution</span><strong>Project direction, content, and website development</strong></div>
       <div><span>Focus</span><strong>Travel stories, guides, and motorhome projects</strong></div>
     </div>
+
+    <LineageDiagram title="from the road to the reader" columns={lineage} />
 
     <section class="project-section" aria-labelledby="about-heading">
       <p class="eyebrow">About the project</p>
@@ -45,7 +55,7 @@ const projectRepository = 'https://github.com/higormflima/odisseiamundana';
       <p>From December 2018 to July 2019, we converted a 1998 Iveco Daily 35.10 in our garage in São José dos Campos, Brazil. We planned the interior and built a home on wheels with a bed, kitchen, bathroom, and storage. The project documents the decisions, systems, and lessons from that work.</p>
     </section>
 
-    <div class="hero-actions">
+    <div class="actions">
       <a class="button button-primary" href={projectSite} target="_blank" rel="noreferrer">Visit the project site <span aria-hidden="true">↗</span></a>
       <a class="text-link" href={projectRepository} target="_blank" rel="noreferrer">Explore the source repository <span aria-hidden="true">↗</span></a>
     </div>

@@ -1,0 +1,55 @@
+---
+import { metrics } from '../data/metrics';
+---
+
+<section class="kpi-strip page-shell" aria-label="Career in numbers">
+  {metrics.map((metric, index) => (
+    <div class="kpi card" data-reveal style={`--reveal-delay:${index * 70}ms`}>
+      <p class="kpi-value mono"><span data-count={metric.value}>{metric.value}</span><span class="kpi-suffix">{metric.suffix}</span></p>
+      <p class="kpi-label">{metric.label}</p>
+      <p class="kpi-source">{metric.source}</p>
+    </div>
+  ))}
+</section>
+
+<script>
+  const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce && 'IntersectionObserver' in window) {
+    const animate = (el: HTMLElement) => {
+      const target = Number(el.dataset.count);
+      const duration = 1400;
+      const start = performance.now();
+      const tick = (time: number) => {
+        const progress = Math.min((time - start) / duration, 1);
+        el.textContent = String(Math.round(target * (1 - Math.pow(1 - progress, 3))));
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          animate(entry.target as HTMLElement);
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.6 });
+    counters.forEach((el) => {
+      el.textContent = '0';
+      observer.observe(el);
+    });
+  }
+</script>
+
+<style>
+  .kpi-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: .75rem; }
+  .kpi { padding: 1.2rem 1.1rem; overflow: hidden; }
+  .kpi::before { position: absolute; top: 0; left: 1.1rem; width: 1.5rem; height: 2px; background: var(--accent-fill); content: ''; }
+  .kpi-value { margin: 0 0 .35rem; color: var(--text); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .kpi-suffix { color: var(--accent); }
+  .kpi-label { margin: 0 0 .5rem; color: var(--text-soft); font-size: .82rem; line-height: 1.35; }
+  .kpi-source { margin: 0; color: var(--text-mute); font-family: var(--mono); font-size: .64rem; line-height: 1.4; }
+  @media (max-width: 1080px) { .kpi-strip { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .kpi-strip { grid-template-columns: repeat(2, 1fr); } }
+</style>

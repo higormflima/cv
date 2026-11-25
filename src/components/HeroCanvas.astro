@@ -1,0 +1,163 @@
+<canvas class="hero-canvas" data-hero-canvas aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
+  const ctx = canvas?.getContext('2d');
+
+  if (canvas && ctx) {
+    type Particle = { x: number; baseY: number; lane: number; speed: number; phase: number; amp: number; size: number };
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let width = 0;
+    let height = 0;
+    let lanes = 0;
+    let particles: Particle[] = [];
+    let raf = 0;
+    let running = false;
+    let time = 0;
+    const pointer = { x: -9999, y: -9999 };
+    let colors = { raw: [163, 175, 187], on: [198, 244, 50] };
+
+    const readColors = () => {
+      const style = getComputedStyle(document.documentElement);
+      const parse = (name: string, fallback: number[]) => {
+        const values = style.getPropertyValue(name).trim().split(/\s+/).map(Number);
+        return values.length === 3 && values.every((n) => !Number.isNaN(n)) ? values : fallback;
+      };
+      colors = { raw: parse('--particle', colors.raw), on: parse('--particle-on', colors.on) };
+    };
+
+    const smoothstep = (a: number, b: number, x: number) => {
+      const t = Math.min(Math.max((x - a) / (b - a), 0), 1);
+      return t * t * (3 - 2 * t);
+    };
+
+    const spawn = (x = Math.random() * width): Particle => ({
+      x,
+      baseY: Math.random() * height,
+      lane: Math.floor(Math.random() * lanes),
+      speed: 0.25 + Math.random() * 0.55,
+      phase: Math.random() * Math.PI * 2,
+      amp: 10 + Math.random() * 26,
+      size: 0.8 + Math.random() * 1.2,
+    });
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      lanes = Math.max(6, Math.floor(height / 34));
+      const count = Math.round(Math.min(Math.max((width * height) / 7000, 70), 220));
+      particles = Array.from({ length: count }, () => spawn());
+    };
+
+    const laneY = (lane: number) => ((lane + 0.5) / lanes) * height;
+
+    const frame = () => {
+      time += 16;
+      ctx.clearRect(0, 0, width, height);
+      const positions: { x: number; y: number; b: number }[] = [];
+
+      for (const p of particles) {
+        if (!reduceMotion) p.x += p.speed;
+        if (p.x > width + 20) Object.assign(p, spawn(-20));
+        const b = smoothstep(width * 0.38, width * 0.68, p.x);
+        const rawY = p.baseY + Math.sin(time * 0.0009 * (1 + p.speed) + p.phase) * p.amp;
+        let y = rawY + (laneY(p.lane) - rawY) * b;
+        let x = p.x;
+        const dx = x - pointer.x;
+        const dy = y - pointer.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 110) {
+          const force = (1 - dist / 110) * 26;
+          x += (dx / (dist || 1)) * force;
+          y += (dy / (dist || 1)) * force;
+        }
+        positions.push({ x, y, b });
+      }
+
+      ctx.lineWidth = 1;
+      for (let i = 0; i < positions.length; i++) {
+        const a = positions[i];
+        if (a.b > 0.4) continue;
+        for (let j = i + 1; j < positions.length; j++) {
+          const c = positions[j];
+          if (c.b > 0.4) continue;
+          const d = Math.hypot(a.x - c.x, a.y - c.y);
+          if (d < 70) {
+            ctx.strokeStyle = `rgb(${colors.raw.join(' ')} / ${(1 - d / 70) * 0.16 * (1 - a.b * 2)})`;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(c.x, c.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      for (const pos of positions) {
+        const [r1, g1, b1] = colors.raw;
+        const [r2, g2, b2] = colors.on;
+        const mix = (from: number, to: number) => Math.round(from + (to - from) * pos.b);
+        const rgb = `${mix(r1, r2)} ${mix(g1, g2)} ${mix(b1, b2)}`;
+        if (pos.b > 0.05) {
+          const trail = 26 * pos.b;
+          const gradient = ctx.createLinearGradient(pos.x - trail, pos.y, pos.x, pos.y);
+          gradient.addColorStop(0, `rgb(${rgb} / 0)`);
+          gradient.addColorStop(1, `rgb(${rgb} / ${0.55 * pos.b})`);
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(pos.x - trail, pos.y);
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+        }
+        ctx.fillStyle = `rgb(${rgb} / ${0.35 + pos.b * 0.6})`;
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 1.1 + pos.b * 0.9, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (running) raf = requestAnimationFrame(frame);
+    };
+
+    const start = () => {
+      if (running || reduceMotion) return;
+      running = true;
+      raf = requestAnimationFrame(frame);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+
+    readColors();
+    resize();
+    if (reduceMotion) frame();
+
+    new IntersectionObserver(([entry]) => (entry.isIntersecting && !document.hidden ? start() : stop())).observe(canvas);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    new ResizeObserver(() => {
+      resize();
+      if (reduceMotion) frame();
+    }).observe(canvas);
+    window.addEventListener('themechange', () => {
+      readColors();
+      if (reduceMotion) frame();
+    });
+    canvas.parentElement?.addEventListener('pointermove', (event) => {
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = event.clientX - rect.left;
+      pointer.y = event.clientY - rect.top;
+    });
+    canvas.parentElement?.addEventListener('pointerleave', () => {
+      pointer.x = pointer.y = -9999;
+    });
+  }
+</script>
+
+<style>
+  .hero-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; mask-image: linear-gradient(180deg, transparent, #000 12%, #000 80%, transparent); pointer-events: none; }
+</style>

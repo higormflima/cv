@@ -1,34 +1,42 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import SkillGraph from '../components/SkillGraph.astro';
 import { certifications, languages, skillGroups } from '../data/skills';
+
+const levels: Record<string, number> = { 'Native or Bilingual': 100, 'Full Professional': 88, 'Professional Working': 70, Elementary: 30 };
 ---
 
-<SiteLayout title="Skills | Higor Lima" description="Skills, certifications, and languages listed in Higor Lima's latest CV.">
+<SiteLayout title="Skills | Higor Lima" description="An interactive knowledge graph of Higor Lima's skills, tools, certifications and languages, connected to the companies where they were used.">
   <section class="page-shell interior-page">
-    <p class="eyebrow"><span class="eyebrow-dot"></span> 03 · Skills</p>
-    <h1>Tools for clear<br /><em>thinking.</em></h1>
-    <p class="page-lead">Skills and tools from Higor’s latest CV.</p>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>// 03 skills</p>
+    <h1 class="page-title">Tools for <span class="gradient-text">clear thinking.</span></h1>
+    <p class="page-lead">Skills mapped as a graph: each tool is linked to its practice area and to the companies where it was used.</p>
+
+    <SkillGraph />
+
     <div class="skills-grid">
       {skillGroups.map((group, index) => (
-        <section class="skill-card">
+        <section class="skill-card card" data-reveal style={`--reveal-delay:${index * 60}ms`}>
           <span class="card-number">{String(index + 1).padStart(2, '0')}</span>
           <h2>{group.title}</h2>
-          <ul>{group.items.map((item) => <li>{item}</li>)}</ul>
+          <ul>{group.items.map((item) => <li class="chip">{item}</li>)}</ul>
         </section>
       ))}
-    </div>
-
-    <div class="profile-details-grid">
-      <section class="skill-card" aria-labelledby="certifications-heading">
+      <section class="skill-card card" aria-labelledby="certifications-heading" data-reveal>
         <span class="card-number">05</span>
         <h2 id="certifications-heading">Certifications</h2>
         <ul class="detail-list">{certifications.map((item) => <li>{item}</li>)}</ul>
       </section>
-      <section class="skill-card" aria-labelledby="languages-heading">
+      <section class="skill-card card" aria-labelledby="languages-heading" data-reveal>
         <span class="card-number">06</span>
         <h2 id="languages-heading">Languages</h2>
         <ul class="language-list">
-          {languages.map((item) => <li><strong>{item.name}</strong><span>{item.level}</span></li>)}
+          {languages.map((item) => (
+            <li class="language-row">
+              <div><strong>{item.name}</strong><span>{item.level}</span></div>
+              <span class="meter" aria-hidden="true"><i style={`width:${levels[item.level] ?? 50}%`}></i></span>
+            </li>
+          ))}
         </ul>
       </section>
     </div>

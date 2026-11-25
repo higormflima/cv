@@ -1,0 +1,112 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import { profile } from '../data/profile';
+import { experience, shortRole } from '../data/experience';
+import { education } from '../data/education';
+import { certifications, languages, skillGroups } from '../data/skills';
+import { siteUrl } from '../lib/paths';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{profile.name} — CV</title>
+  </head>
+  <body>
+    <main class="sheet">
+      <header class="head">
+        <div>
+          <h1>{profile.name}</h1>
+          <p class="headline">{profile.title} · {profile.headline}</p>
+        </div>
+        <ul class="contact">
+          <li>{profile.shortLocation}</li>
+          <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
+          <li><a href={profile.linkedIn}>linkedin.com/in/higormflima</a></li>
+          <li><a href={`${siteUrl}/`}>higormflima.github.io/cv</a></li>
+        </ul>
+      </header>
+
+      <p class="summary">{profile.summary} {profile.focus}</p>
+
+      <div class="cols">
+        <section class="main">
+          <h2><span>//</span> Experience</h2>
+          {experience.map((role) => (
+            <article class="role">
+              <div class="role-head">
+                <h3>{shortRole(role)} <span>· {role.organization}</span></h3>
+                <p class="dates">{role.dates}</p>
+              </div>
+              <p class="loc">{role.location}</p>
+              <ul>{role.highlights.map((h) => <li>{h}</li>)}</ul>
+            </article>
+          ))}
+        </section>
+
+        <aside class="side">
+          <h2><span>//</span> Skills</h2>
+          {skillGroups.map((group) => (
+            <div class="block">
+              <h3>{group.title}</h3>
+              <p>{group.items.join(' · ')}</p>
+            </div>
+          ))}
+          <h2><span>//</span> Education</h2>
+          {education.map((item) => (
+            <div class="block">
+              <h3>{item.qualification}</h3>
+              <p>{item.institution}<br />{item.dates}</p>
+            </div>
+          ))}
+          <h2><span>//</span> Certifications</h2>
+          <ul class="plain">{certifications.map((c) => <li>{c}</li>)}</ul>
+          <h2><span>//</span> Languages</h2>
+          <ul class="plain">{languages.map((l) => <li><strong>{l.name}</strong> — {l.level}</li>)}</ul>
+        </aside>
+      </div>
+      <footer class="foot">Machine-readable version: {siteUrl}/api/profile.json</footer>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  @page { size: A4; margin: 12mm 12mm 12mm; }
+  * { box-sizing: border-box; }
+  html { background: #e9ece6; }
+  body { margin: 0; color: #111a16; font: 9.2pt/1.45 'Inter Variable', 'Segoe UI', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  a { color: inherit; text-decoration: none; }
+  .sheet { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm; background: #fff; }
+  @media print { html { background: #fff; } .sheet { width: auto; min-height: 0; margin: 0; padding: 0; } }
+  .head { display: flex; justify-content: space-between; gap: 8mm; padding-bottom: 4mm; border-bottom: 2px solid #111a16; }
+  h1 { margin: 0; font-size: 24pt; letter-spacing: -.04em; line-height: 1; }
+  .headline { margin: 2mm 0 0; color: #4a7200; font: 600 9pt 'JetBrains Mono Variable', monospace; }
+  .contact { display: grid; gap: .6mm; margin: 0; padding: 0; list-style: none; color: #46534d; font-size: 8.4pt; text-align: right; }
+  .summary { margin: 4mm 0 5mm; color: #2c3833; font-size: 9.4pt; }
+  .cols { display: grid; grid-template-columns: 1fr 58mm; gap: 7mm; }
+  h2 { margin: 0 0 2.5mm; font-size: 10.5pt; letter-spacing: -.01em; text-transform: uppercase; }
+  h2 span { color: #4a7200; font-family: 'JetBrains Mono Variable', monospace; }
+  .side h2 { margin-top: 4mm; }
+  .side h2:first-child { margin-top: 0; }
+  .role { margin-bottom: 3.2mm; break-inside: avoid; }
+  .role-head { display: flex; justify-content: space-between; gap: 4mm; align-items: baseline; }
+  .role h3 { margin: 0; font-size: 9.6pt; }
+  .role h3 span { color: #46534d; font-weight: 500; }
+  .dates { margin: 0; color: #4a7200; font: 500 7.6pt 'JetBrains Mono Variable', monospace; white-space: nowrap; }
+  .loc { margin: 0 0 1mm; color: #6b7872; font-size: 7.8pt; }
+  .role ul { margin: 0; padding-left: 3.6mm; }
+  .role li { margin-bottom: .5mm; color: #2c3833; }
+  .role li::marker { color: #4a7200; }
+  .side { padding-left: 5mm; border-left: 1px solid #dfe4dc; }
+  .block { margin-bottom: 2.6mm; break-inside: avoid; }
+  .block h3 { margin: 0 0 .6mm; font-size: 8.6pt; }
+  .block p { margin: 0; color: #46534d; font-size: 8.2pt; }
+  .plain { margin: 0; padding: 0; list-style: none; color: #46534d; font-size: 8.2pt; }
+  .plain li { margin-bottom: 1mm; }
+  .plain strong { color: #111a16; }
+  .foot { margin-top: 5mm; padding-top: 2mm; border-top: 1px solid #dfe4dc; color: #6b7872; font: 7.4pt 'JetBrains Mono Variable', monospace; }
+</style>

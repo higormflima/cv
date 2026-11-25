@@ -1,15 +1,56 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import { storyIntro, storyStages } from '../data/story';
+import { base } from '../lib/paths';
 ---
 
-<SiteLayout title="Story | Higor Lima" description="A personal introduction to Higor Lima. This page is awaiting story content.">
+<SiteLayout title="Story | Higor Lima" description="Higor Lima's path from the Brazilian Army and mechanical engineering to data analysis and AI-ready data foundations, told as a data pipeline.">
   <section class="page-shell interior-page">
-    <p class="eyebrow"><span class="eyebrow-dot"></span> 01 · Story</p>
-    <h1>A little more<br /><em>about me.</em></h1>
-    <div class="placeholder-panel">
-      <span class="placeholder-label">Placeholder</span>
-      <h2>Add a personal introduction.</h2>
-      <p>Placeholder: add a personal narrative, background, and the details you would like visitors to know.</p>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>// 01 story</p>
+    <h1 class="page-title">A career built like <span class="gradient-text">a data pipeline.</span></h1>
+    <p class="page-lead">{storyIntro}</p>
+
+    <ol class="pipeline">
+      {storyStages.map((stage, index) => (
+        <li class="stage" data-reveal style={`--reveal-delay:${index * 80}ms`}>
+          <div class="stage-node mono" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>
+          <article class="stage-card card card-glow">
+            <p class="stage-step mono"><span>{stage.step}()</span><span>{stage.years}</span></p>
+            <h2>{stage.title}</h2>
+            <p>{stage.text}</p>
+            <ul class="stage-carry" aria-label="What carried forward">
+              {stage.carry.map((item) => <li class="chip">+ {item}</li>)}
+            </ul>
+          </article>
+        </li>
+      ))}
+    </ol>
+
+    <div class="story-output card" data-reveal>
+      <p class="mono comment">// output</p>
+      <p class="story-output-text">A data professional who thinks like an engineer, tests like QA, and delivers like a sergeant.</p>
+      <div class="actions">
+        <a class="button button-primary" href={`${base}/experience/`}>See the full timeline <span aria-hidden="true">→</span></a>
+        <a class="text-link" href={`${base}/projects/odisseia-mundana/`}>And the motorhome side quest ↗</a>
+      </div>
     </div>
   </section>
 </SiteLayout>
+
+<style>
+  .pipeline { position: relative; display: grid; gap: 1.25rem; max-width: 900px; margin: 1rem 0 0; padding: 0; list-style: none; }
+  .pipeline::before { position: absolute; top: 1rem; bottom: 1rem; left: 1.4rem; width: 2px; background: linear-gradient(180deg, var(--track-military), var(--track-engineering), var(--track-quality), var(--track-data)); content: ''; opacity: .7; }
+  .pipeline::after { position: absolute; top: 0; left: calc(1.4rem - 3px); width: 8px; height: 8px; border-radius: 50%; background: var(--accent-fill); box-shadow: 0 0 14px var(--accent-fill); content: ''; animation: flow 6s linear infinite; }
+  @keyframes flow { from { top: 1rem; } to { top: calc(100% - 1rem); } }
+  .stage { position: relative; display: grid; grid-template-columns: 2.8rem 1fr; gap: 1.25rem; align-items: start; }
+  .stage-node { position: relative; z-index: 1; display: grid; width: 2.8rem; height: 2.8rem; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; background: var(--bg-elev); color: var(--accent); font-size: .75rem; }
+  .stage-card { padding: 1.4rem 1.5rem; }
+  .stage-card .stage-step { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .5rem; color: var(--accent); font-size: .76rem; }
+  .stage-step span:last-child { color: var(--text-mute); }
+  .stage-card h2 { margin-bottom: .6rem; font-size: 1.45rem; }
+  .stage-card p { color: var(--text-soft); }
+  .stage-carry { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+  .story-output { max-width: 900px; margin-top: 2.5rem; padding: clamp(1.5rem, 4vw, 2.5rem); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+  .story-output-text { max-width: 640px; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 650; letter-spacing: -.03em; line-height: 1.2; }
+  @media (max-width: 520px) { .stage { grid-template-columns: 1fr; } .stage-node, .pipeline::before, .pipeline::after { display: none; } }
+</style>

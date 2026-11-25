@@ -1,7 +1,15 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import LineageDiagram from '../../components/LineageDiagram.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const lineage = [
+  { label: 'Sources', nodes: ['System A', 'System B', 'System C'] },
+  { label: 'Mapping', nodes: ['Field mapping', 'Business rules'] },
+  { label: 'Transform', nodes: ['Transformation logic'] },
+  { label: 'Model', nodes: ['Shared data model'], highlight: true },
+  { label: 'Delivery', nodes: ['User stories', 'Engineering teams'] },
+];
 ---
 
 <SiteLayout
@@ -9,14 +17,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   description="A generalized case study of business analysis work on an enterprise data integration initiative."
 >
   <article class="page-shell interior-page project-case">
-    <p class="eyebrow"><span class="eyebrow-dot"></span> Selected project · Business analysis</p>
-    <h1>Enterprise Data<br /><em>Integration.</em></h1>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>// case study · business analysis</p>
+    <h1 class="page-title">Enterprise Data <span class="gradient-text">Integration.</span></h1>
     <p class="page-lead">Business analysis for an initiative to connect data across separate business systems.</p>
 
-    <div class="project-facts" aria-label="Project summary">
+    <div class="project-facts card" aria-label="Project summary">
       <div><span>Role</span><strong>Business Analyst</strong></div>
       <div><span>Focus</span><strong>Requirements and data integration</strong></div>
     </div>
+
+    <LineageDiagram title="from fragmented systems to a shared model" columns={lineage} />
 
     <section class="project-section" aria-labelledby="context-heading">
       <p class="eyebrow">Context</p>

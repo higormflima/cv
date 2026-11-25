@@ -1,14 +1,30 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import { base } from '../lib/paths';
 ---
 
 <SiteLayout title="Page not found | Higor Lima" description="The page you are looking for could not be found.">
-  <section class="page-shell interior-page not-found">
-    <p class="eyebrow"><span class="eyebrow-dot"></span> 404 · Page not found</p>
-    <h1>This page<br /><em>isn't here.</em></h1>
-    <p class="page-lead">The page you are looking for may have moved or no longer exists.</p>
-    <a class="button button-primary" href={`${base}/`}>Back to home <span aria-hidden="true">↗</span></a>
+  <section class="page-shell interior-page">
+    <p class="eyebrow"><span class="eyebrow-dot" style="background:var(--accent-4)"></span>// error 404</p>
+    <h1 class="page-title">Query returned <span class="gradient-text">0 rows.</span></h1>
+    <pre class="card not-found-log"><code><span class="prompt">❯</span> SELECT * FROM pages WHERE path = '<span data-path></span>';
+<span class="err">ERROR:</span> relation "page" not found. It may have moved or never existed.
+<span class="hint">HINT:</span> press <kbd>/</kbd> to search, or head back home.</code></pre>
+    <div class="actions">
+      <a class="button button-primary" href={`${base}/`}>Back to home <span aria-hidden="true">→</span></a>
+      <button class="button" type="button" data-palette-open>Open command menu</button>
+    </div>
   </section>
 </SiteLayout>
+
+<script>
+  const target = document.querySelector('[data-path]');
+  if (target) target.textContent = location.pathname;
+</script>
+
+<style>
+  .not-found-log { max-width: 720px; margin: 1rem 0 2rem; padding: 1.25rem 1.4rem; overflow-x: auto; color: var(--text-soft); font-size: .85rem; line-height: 1.8; white-space: pre-wrap; }
+  .prompt { color: var(--accent); }
+  .err { color: #ff6b6b; }
+  .hint { color: var(--accent-2); }
+</style>

@@ -1,35 +1,44 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { experience } from '../data/experience';
+import CareerGantt from '../components/CareerGantt.astro';
+import { experience, trackLabels } from '../data/experience';
 import { education } from '../data/education';
 ---
 
-<SiteLayout title="Experience | Higor Lima" description="Professional experience of Higor Lima, from business analysis and data analytics to earlier engineering and aviation roles.">
+<SiteLayout title="Experience | Higor Lima" description="Professional experience of Higor Lima: data governance and analytics at Bayer, business analysis at Chubb and Reckitt, BI consulting for Unilever, and earlier engineering and aviation roles.">
   <section class="page-shell interior-page">
-    <p class="eyebrow"><span class="eyebrow-dot"></span> 02 · Experience</p>
-    <h1>Work that moves<br /><em>things forward.</em></h1>
-    <p class="page-lead">Roles and contributions from Higor’s latest CV.</p>
+    <p class="eyebrow"><span class="eyebrow-dot"></span>// 02 experience</p>
+    <h1 class="page-title">Work that moves <span class="gradient-text">things forward.</span></h1>
+    <p class="page-lead">{experience.length} roles across four careers. Hover or tap a bar to inspect it, and click to jump to the details.</p>
+
+    <CareerGantt linkPrefix="" />
+
     <div class="timeline">
       {experience.map((item, index) => (
-        <article class="timeline-item">
-          <div class="timeline-marker"><span>{String(index + 1).padStart(2, '0')}</span></div>
+        <article class="timeline-item card" id={item.id} data-track={item.track} data-reveal>
+          <div class="timeline-side">
+            <span>{String(experience.length - index).padStart(2, '0')} / {String(experience.length).padStart(2, '0')}</span>
+            <span>{item.dates}</span>
+            <span class="track-badge">{trackLabels[item.track]}</span>
+          </div>
           <div class="timeline-content">
-            <div class="timeline-meta"><span>{item.dates}</span><span>{item.location}</span></div>
             <h2>{item.organization}</h2>
             <p class="role-title">{item.role}</p>
+            <p class="role-location">{item.location}</p>
             <ul>{item.highlights.map((highlight) => <li>{highlight}</li>)}</ul>
+            {item.stack && <ul class="stack-list" aria-label="Tools and practices">{item.stack.map((tool) => <li class="chip">{tool}</li>)}</ul>}
           </div>
         </article>
       ))}
     </div>
 
-    <section class="education-section" aria-labelledby="education-heading">
-      <p class="eyebrow"><span class="eyebrow-dot"></span> Education</p>
-      <h2 id="education-heading">Learning and foundations.</h2>
+    <section class="education-section" id="education" aria-labelledby="education-heading">
+      <p class="eyebrow"><span class="eyebrow-dot"></span>// education</p>
+      <h2 id="education-heading" class="page-title" style="font-size: clamp(2rem, 4vw, 3rem)">Learning and foundations.</h2>
       <div class="education-list">
         {education.map((item) => (
-          <article class="education-item">
-            <div class="timeline-meta"><span>{item.dates}</span></div>
+          <article class="education-item card" data-track="education" data-reveal>
+            <span class="track-badge mono">{item.dates}</span>
             <h3>{item.qualification}</h3>
             <p>{item.institution}</p>
           </article>

@@ -1,0 +1,117 @@
+---
+import { experience, shortRole, trackLabels, type Track } from '../data/experience';
+import { education } from '../data/education';
+import { base } from '../lib/paths';
+
+interface Props {
+  compact?: boolean;
+  linkPrefix?: string;
+}
+
+const { compact = false, linkPrefix = `${base}/experience/` } = Astro.props;
+
+const startYear = 2004;
+const now = new Date();
+const endYear = now.getFullYear() + 1;
+const span = endYear - startYear;
+const toYears = (ym: string | null) => {
+  if (!ym) return now.getFullYear() + now.getMonth() / 12 - startYear;
+  const [year, month] = ym.split('-').map(Number);
+  return year + (month - 1) / 12 - startYear;
+};
+const pct = (value: number) => `${((value / span) * 100).toFixed(3)}%`;
+
+type Row = { id: string; label: string; sub: string; dates: string; track: Track | 'education'; start: number; end: number; current: boolean };
+const rows: Row[] = [
+  ...experience.map((role) => ({
+    id: role.id,
+    label: role.organization.replace(/ \(.*\)$/, '').replace(/ — .*$/, ''),
+    sub: shortRole(role),
+    dates: role.dates,
+    track: role.track,
+    start: toYears(role.start),
+    end: toYears(role.end),
+    current: role.end === null,
+  })),
+  ...education.map((item, index) => ({
+    id: 'education',
+    label: item.short,
+    sub: item.qualification,
+    dates: item.dates,
+    track: 'education' as const,
+    start: toYears(item.start),
+    end: toYears(item.end) + 1 / 12,
+    current: false,
+  })),
+].sort((a, b) => a.start - b.start);
+
+const ticks = Array.from({ length: Math.floor(span / 2) + 1 }, (_, i) => startYear + i * 2);
+const legend = [...(Object.keys(trackLabels) as Track[]).map((key) => ({ key, label: trackLabels[key] })), { key: 'education', label: 'Education' }];
+---
+
+<figure class:list={['gantt', { 'gantt-compact': compact }]} data-reveal>
+  <figcaption class="gantt-head">
+    <span class="comment">// career.gantt — {startYear} → today · click a bar for details</span>
+    <ul class="gantt-legend">
+      {legend.map((item) => <li data-track={item.key}>{item.label}</li>)}
+    </ul>
+  </figcaption>
+  <div class="gantt-scroll">
+    <div class="gantt-body" style={`--span:${span}`}>
+      <div class="gantt-axis" aria-hidden="true">
+        {ticks.map((year) => <span style={`left:${pct(year - startYear)}`}>{year}</span>)}
+      </div>
+      <ol class="gantt-rows">
+        {rows.map((row, index) => (
+          <li class="gantt-row" data-track={row.track}>
+            <span class="gantt-label"><strong>{row.label}</strong>{!compact && <span>{row.sub}</span>}</span>
+            <span class="gantt-lane">
+              <a
+                class:list={['gantt-bar', { 'is-current': row.current }]}
+                href={`${linkPrefix}#${row.id}`}
+                style={`left:${pct(row.start)};width:${pct(Math.max(row.end - row.start, 0.25))};--i:${index}`}
+                aria-label={`${row.label}: ${row.sub}, ${row.dates}`}
+              >
+                <span class="gantt-tip" aria-hidden="true"><strong>{row.sub}</strong><span>{row.label} · {row.dates}</span></span>
+              </a>
+            </span>
+          </li>
+        ))}
+      </ol>
+      <span class="gantt-now" style={`--x:${(toYears(null) / span).toFixed(4)}`} aria-hidden="true"><span>now</span></span>
+    </div>
+  </div>
+</figure>
+
+<style>
+  .gantt { margin: 0; padding: 1.25rem 1.25rem 1rem; border: 1px solid var(--line); border-radius: var(--radius); background: color-mix(in srgb, var(--surface) 80%, transparent); }
+  .gantt-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1.5rem; margin-bottom: 1.25rem; }
+  .gantt-legend { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin: 0; padding: 0; list-style: none; color: var(--text-soft); font-family: var(--mono); font-size: .7rem; }
+  .gantt-legend li { display: inline-flex; align-items: center; gap: .4rem; }
+  .gantt-legend li::before { width: .7rem; height: .45rem; border-radius: 2px; background: var(--track-color); content: ''; }
+  .gantt-scroll { overflow-x: auto; padding-bottom: .5rem; }
+  .gantt-body { --label: 13rem; position: relative; min-width: 760px; padding-block: 1.6rem 1.5rem; }
+  .gantt-compact .gantt-body { --label: 11.5rem; }
+  .gantt-axis { position: absolute; top: 0; right: 0; bottom: 0; left: var(--label); pointer-events: none; }
+  .gantt-axis span { position: absolute; top: 0; bottom: 0; padding-left: .3rem; border-left: 1px dashed var(--line); color: var(--text-mute); font-family: var(--mono); font-size: .66rem; }
+  .gantt-rows { position: relative; display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+  .gantt-row { display: grid; grid-template-columns: var(--label) 1fr; align-items: center; min-height: 2.1rem; }
+  .gantt-compact .gantt-row { min-height: 1.6rem; }
+  .gantt-label { display: grid; padding-right: 1rem; overflow: hidden; font-size: .8rem; line-height: 1.25; white-space: nowrap; }
+  .gantt-label strong { overflow: hidden; font-weight: 600; text-overflow: ellipsis; }
+  .gantt-label span { overflow: hidden; color: var(--text-mute); font-size: .7rem; text-overflow: ellipsis; }
+  .gantt-lane { position: relative; height: 1.25rem; }
+  .gantt-compact .gantt-lane { height: .9rem; }
+  .gantt-bar { position: absolute; top: 0; bottom: 0; min-width: 8px; border-radius: 5px; background: var(--track-color); box-shadow: 0 0 18px -4px var(--track-color); transform-origin: left; transition: filter .2s ease, transform .2s ease; }
+  :global(.js) .gantt-bar { transform: scaleX(0); }
+  :global(.js) .gantt:global(.is-visible) .gantt-bar { transform: scaleX(1); transition: transform .9s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * 60ms), filter .2s ease; }
+  .gantt-row[data-track='education'] .gantt-bar { background: repeating-linear-gradient(135deg, var(--track-color) 0 4px, transparent 4px 8px); box-shadow: inset 0 0 0 1px var(--track-color); }
+  .gantt-bar:hover, .gantt-bar:focus-visible { z-index: 3; filter: brightness(1.15); }
+  .gantt-bar.is-current::after { position: absolute; top: 50%; right: -4px; width: 8px; height: 8px; border-radius: 50%; background: var(--track-color); box-shadow: 0 0 0 0 var(--glow); content: ''; transform: translateY(-50%); animation: pulse 2s ease-out infinite; }
+  .gantt-tip { position: absolute; bottom: calc(100% + 8px); left: 0; z-index: 5; display: grid; width: max-content; max-width: 260px; padding: .5rem .7rem; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg-elev); box-shadow: var(--shadow); color: var(--text); font-size: .75rem; line-height: 1.4; opacity: 0; pointer-events: none; transform: translateY(4px); transition: opacity .15s ease, transform .15s ease; }
+  .gantt-tip span { color: var(--text-mute); font-family: var(--mono); font-size: .66rem; }
+  .gantt-bar:hover .gantt-tip, .gantt-bar:focus-visible .gantt-tip { opacity: 1; transform: none; }
+  .gantt-now { position: absolute; top: 1.2rem; bottom: 1.5rem; left: calc(var(--label) + (100% - var(--label)) * var(--x)); width: 0; border-left: 1px solid var(--accent); pointer-events: none; }
+  .gantt-now span { position: absolute; bottom: -1.35rem; left: -.9rem; color: var(--accent); font-family: var(--mono); font-size: .62rem; }
+  @media (prefers-reduced-motion: reduce) { :global(.js) .gantt-bar { transform: none; } }
+</style>

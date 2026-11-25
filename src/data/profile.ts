@@ -3,6 +3,8 @@ export const profile = {
   title: 'Data Specialist',
   headline: 'Building AI-Ready Data Foundations',
   location: 'Warsaw, Mazowieckie, Poland',
+  shortLocation: 'Warsaw, Poland',
+  tagline: 'From raw data to real business value',
   email: 'higor.m.f.lima@gmail.com',
   phone: '+48 792915569',
   linkedIn: 'https://www.linkedin.com/in/higormflima',

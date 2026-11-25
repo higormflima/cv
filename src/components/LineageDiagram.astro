@@ -1,0 +1,84 @@
+---
+interface Column {
+  label: string;
+  nodes: string[];
+  highlight?: boolean;
+}
+
+interface Props {
+  title: string;
+  columns: Column[];
+}
+
+const { title, columns } = Astro.props;
+const colWidth = 170;
+const gap = 70;
+const nodeH = 40;
+const nodeGap = 14;
+const headerH = 34;
+const maxNodes = Math.max(...columns.map((c) => c.nodes.length));
+const height = headerH + maxNodes * nodeH + (maxNodes - 1) * nodeGap + 20;
+const width = columns.length * colWidth + (columns.length - 1) * gap;
+
+const layout = columns.map((column, ci) => {
+  const total = column.nodes.length * nodeH + (column.nodes.length - 1) * nodeGap;
+  const top = headerH + (height - headerH - 20 - total) / 2;
+  return {
+    ...column,
+    x: ci * (colWidth + gap),
+    nodes: column.nodes.map((label, ni) => ({ label, y: top + ni * (nodeH + nodeGap) })),
+  };
+});
+
+const links = layout.slice(0, -1).flatMap((column, ci) =>
+  column.nodes.flatMap((from) =>
+    layout[ci + 1].nodes.map((to) => {
+      const x1 = column.x + colWidth;
+      const y1 = from.y + nodeH / 2;
+      const x2 = layout[ci + 1].x;
+      const y2 = to.y + nodeH / 2;
+      const mx = (x1 + x2) / 2;
+      return `M${x1} ${y1} C${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`;
+    }),
+  ),
+);
+---
+
+<figure class="lineage card" data-reveal>
+  <figcaption class="comment">// lineage — {title}</figcaption>
+  <div class="lineage-scroll">
+    <svg viewBox={`-2 -2 ${width + 4} ${height + 4}`} role="img" aria-label={`Data lineage: ${columns.map((c) => `${c.label} (${c.nodes.join(', ')})`).join(' → ')}`}>
+      <g class="links">
+        {links.map((d) => <path d={d} />)}
+        {links.map((d, i) => <path class="flow" d={d} style={`animation-delay:${(i % 5) * -0.6}s`} />)}
+      </g>
+      {layout.map((column) => (
+        <g class:list={['column', { 'is-highlight': column.highlight }]}>
+          <text class="col-label" x={column.x + colWidth / 2} y="14" text-anchor="middle">{column.label}</text>
+          {column.nodes.map((node) => (
+            <g class="lnode">
+              <rect x={column.x} y={node.y} width={colWidth} height={nodeH} rx="9" />
+              <text x={column.x + colWidth / 2} y={node.y + nodeH / 2 + 4} text-anchor="middle">{node.label}</text>
+            </g>
+          ))}
+        </g>
+      ))}
+    </svg>
+  </div>
+</figure>
+
+<style>
+  .lineage { margin: 0 0 3rem; padding: 1.25rem; }
+  .lineage figcaption { margin-bottom: 1rem; }
+  .lineage-scroll { overflow-x: auto; }
+  svg { display: block; width: 100%; min-width: 680px; height: auto; }
+  .links path { fill: none; stroke: var(--line-strong); stroke-width: 1.2; }
+  .links .flow { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 6 120; animation: dash 3s linear infinite; opacity: .85; }
+  @keyframes dash { to { stroke-dashoffset: -126; } }
+  .col-label { fill: var(--text-mute); font: 500 11px var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+  .lnode rect { fill: var(--surface-2); stroke: var(--line-strong); }
+  .lnode text { fill: var(--text); font: 500 12px var(--sans); }
+  .is-highlight .lnode rect { fill: color-mix(in srgb, var(--accent-fill) 16%, var(--surface)); stroke: var(--accent); }
+  .is-highlight .col-label { fill: var(--accent); }
+  @media (prefers-reduced-motion: reduce) { .links .flow { animation: none; } }
+</style>

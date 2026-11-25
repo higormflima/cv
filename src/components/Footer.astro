@@ -1,7 +1,14 @@
+---
+import { base } from '../lib/paths';
+---
+
 <footer class="site-footer">
   <div class="footer-inner">
-    <p>© {new Date().getFullYear()} Higor Lima</p>
-    <p>Personal CV · Built with Astro</p>
-    <a href="#top">Back to top ↑</a>
+    <p class="status"><i aria-hidden="true"></i>© {new Date().getFullYear()} Higor Lima · built with Astro</p>
+    <div class="footer-links">
+      <a href={`${base}/api/profile.json`}>GET /api/profile.json</a>
+      <a href={`${base}/documents/higor-lima-cv.pdf`} download>cv.pdf ↓</a>
+      <a href="#top">back to top ↑</a>
+    </div>
   </div>
 </footer>

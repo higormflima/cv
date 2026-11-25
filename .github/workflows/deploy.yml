@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    # Monthly rebuild keeps the career timeline's "now" marker current.
+    - cron: '0 6 1 * *'
   workflow_dispatch:
 
 permissions:
@@ -31,6 +34,8 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Install Chromium for PDF and social image generation
+        run: pnpm exec playwright install --with-deps chromium
       - name: Build site
         run: pnpm build
       - name: Upload Pages artifact
