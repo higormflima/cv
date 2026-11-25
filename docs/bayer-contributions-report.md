@@ -2,7 +2,7 @@
 
 **Period:** March 2026 – November 2026 · **Title:** Data Analyst · **Location:** Warsaw
 
-> Public, sanitized version. Colleague names, internal URLs, repository links, business figures and internal platform, project, product, team and event names are removed or replaced with generic descriptions. Publicly available vendor tools (Databricks, GitHub, Cursor, Copilot and similar) are named. Every statement below is traceable to a GitHub issue, pull request, review or comment I authored.
+> Public, sanitized version. Colleague names, internal URLs, repository links, business figures and internal platform, project, product, team and event names are removed or replaced with generic descriptions. The enterprise program UCL (Unified Consumption Layer) is named. Publicly available vendor tools (Databricks, GitHub, Cursor, Copilot and similar) are named. Every statement below is traceable to a GitHub issue, pull request, review or comment I authored.
 
 ---
 
@@ -10,7 +10,7 @@
 
 In nine months at Bayer Consumer Health I moved from documenting a single data asset to helping run the metadata platform that turns documentation into AI-ready data products. The work has three main threads:
 
-- **Docs-as-Code.** Data products and tables are described in version-controlled YAML. CI validates them, and merging publishes them to Databricks, to the company's federated data product registry and to Talk-to-Data agents. I wrote documentation, built the docs site and its PR previews, and set the repository's contribution and access rules.
+- **Docs-as-Code.** Data products and tables are described in version-controlled YAML. CI validates them, and merging publishes them to Databricks, to the UCL (Unified Consumption Layer) federated registry and to Talk-to-Data agents. I wrote documentation, built the docs site and its PR previews, and set the repository's contribution and access rules.
 - **AI-ready data and metadata.** I created and reviewed the metadata artifacts behind the first data products in a marketing analytics product family, co-designed their structure, and tested them end to end against an AI agent. The golden-query test passed 4 out of 4 queries.
 - **AI-assisted work, with a human making the decisions.** I use Cursor, GitHub Copilot, Claude and Databricks Genie to draft code, documentation, analyses and proposals. The problem framing, the decision, the review and the validation are mine, and I disclose when an analysis came from a model.
 
@@ -27,7 +27,7 @@ Bayer runs on **Dynamic Shared Ownership (DSO)**: people join the missions where
 | **Consumer core data asset team** | Mar 2026 – present | Data analyst · Scrum master · Project coordinator | Rebuilt the asset wiki and data catalog. Built the team's Azure DevOps board and ran its scrum ceremonies. Owned the asset's metadata artifacts. |
 | **Talk-to-Data platform pilot** | Apr – Jun 2026 | Data analyst · AI solution tester | Turned marketing business questions into SQL. Built and validated Databricks Genie spaces with subject-matter experts. |
 | **Semantic-layer enablement squad** | Sep 2026 – present | Repo admin · Enablement lead for two core data assets · Reviewer | Set up repo governance, CI and the docs site. Onboarded teams. Delivered the first data products of a marketing analytics product family. Wrote design proposals. |
-| **Data platform adoption squad** | Oct 2026 – present | Contributor · Technical writer · Front-end contributor | Wrote the federated registry capability card and its adoption handover. Redesigned the platform's capability roadmap. |
+| **UCL adoption squad** | Oct 2026 – present | Contributor · Technical writer · Front-end contributor | Promoted enterprise-wide UCL adoption. Wrote the UCL federated registry capability card and its adoption handover. Redesigned the UCL capability roadmap. |
 
 ---
 
@@ -41,7 +41,7 @@ Bayer runs on **Dynamic Shared Ownership (DSO)**: people join the missions where
 | Pull requests reviewed | 11 (19 reviews, 12 inline code comments) |
 | Commits to company repositories | 108, across 5 repositories |
 | Teams onboarded to the semantic layer | 6 |
-| Data products I drove to the data platform | 2 deployed; 3 more authored and awaiting business review |
+| Data products I drove to UCL | 2 deployed; 3 more authored and awaiting business review |
 | Deployment environments covered by IaC changes | 3 (development, quality assurance, production) |
 | Wiki pages cleaned up in a single PR | 79 files, 886 duplicated lines removed |
 | Golden-query test of an AI data product | 4 out of 4 passed, average weighted score 4.57 out of 5 |
@@ -63,7 +63,7 @@ Bayer runs on **Dynamic Shared Ownership (DSO)**: people join the missions where
 
 **Semantic layer documentation site (Oct–Nov 2026)**
 - Built an **interactive workflow diagram** of the whole pipeline (documentation → GitHub → engine → Talk-to-Data → registry). It has animated stages, hover tooltips, click-to-focus, a presentation mode and a print stylesheet. I published it on GitHub Pages with an embedded preview.
-- Refreshed the site for its new audience, consumer health teams publishing to the data platform. Added a brand palette with light and dark modes, artifact cards with criticality and readiness badges, last-updated dates and a home-page flow diagram, with `mkdocs build --strict` passing.
+- Refreshed the site for its new audience, consumer health teams publishing to UCL. Added a brand palette with light and dark modes, artifact cards with criticality and readiness badges, last-updated dates and a home-page flow diagram, with `mkdocs build --strict` passing.
 - Added **live PR previews**: every docs PR gets a rendered site link, and the preview is removed on merge. Later I removed the old download-a-zip preview, so each PR gets one comment instead of two.
 - Added "Step 0: Get access" to the data product creation guide, a 36-second overview video, and code-backed architecture diagrams generated with Archify. Each diagram node links to the source lines it describes.
 
@@ -132,9 +132,9 @@ The engine compiles these into the registry's table and data-product JSON, and s
 - **Decision records in the repository.** Turned meetings and chats into issue comments with decisions, rationale, owners and actions, so decisions are traceable after the meeting.
 - **Status reporting.** Set up a recurring team-status cadence covering progress, risks and blockers, so the squad lead can report upward with current information.
 - **Governance by design.** Made sure data exposure, agent tooling and validation were reviewed and agreed before data products were published.
-- **Talks and decks.** Presented the data platform and the semantic layer at an internal technology conference (October) and an internal company event (November), and built a metadata-connections deck used in a leadership presentation.
-- **Data platform portal (adoption squad).**
-  - Wrote the federated registry capability card and quick-start guide, and completed its adoption handover.
+- **Talks and decks.** Promoted enterprise-wide adoption of UCL at an internal technology conference (October), presented UCL and the semantic layer engine at an internal company event (November), and built a metadata-connections deck used in a leadership presentation.
+- **UCL portal (adoption squad).**
+  - Wrote the UCL federated registry capability card and quick-start guide, and completed its adoption handover.
   - Linked its enablement resources following the UI conventions.
   - Added divisional playbook entries.
   - Turned the adoption dashboard into an informative capability roadmap without percentages, so that business units are not ranked against each other.

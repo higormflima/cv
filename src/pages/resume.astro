@@ -6,7 +6,7 @@ import { experience, shortRole } from '../data/experience';
 import { education } from '../data/education';
 import { certifications, languages, skillGroups } from '../data/skills';
 import { talks } from '../data/contributions';
-import { siteUrl } from '../lib/paths';
+import { base, siteUrl } from '../lib/paths';
 ---
 
 <!doctype html>
@@ -20,7 +20,8 @@ import { siteUrl } from '../lib/paths';
   <body>
     <main class="sheet">
       <header class="head">
-        <div>
+        <img class="photo" src={`${base}${profile.portrait}`} alt={profile.portraitAlt} width="900" height="1305" />
+        <div class="head-main">
           <h1>{profile.name}</h1>
           <p class="headline">{profile.title} · {profile.headline}</p>
         </div>
@@ -85,7 +86,9 @@ import { siteUrl } from '../lib/paths';
   a { color: inherit; text-decoration: none; }
   .sheet { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm; background: #fff; }
   @media print { html { background: #fff; } .sheet { width: auto; min-height: 0; margin: 0; padding: 0; } }
-  .head { display: flex; justify-content: space-between; gap: 8mm; padding-bottom: 4mm; border-bottom: 2px solid #111a16; }
+  .head { display: flex; align-items: center; gap: 6mm; padding-bottom: 4mm; border-bottom: 2px solid #111a16; }
+  .head-main { flex: 1; }
+  .photo { width: 24mm; height: 28mm; flex: 0 0 auto; border-radius: 3mm; object-fit: cover; object-position: 50% 22%; }
   h1 { margin: 0; font-size: 24pt; letter-spacing: -.04em; line-height: 1; }
   .headline { margin: 2mm 0 0; color: #4a7200; font: 600 9pt 'JetBrains Mono Variable', monospace; }
   .contact { display: grid; gap: .6mm; margin: 0; padding: 0; list-style: none; color: #46534d; font-size: 8.4pt; text-align: right; }

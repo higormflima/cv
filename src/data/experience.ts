@@ -41,13 +41,15 @@ export const experience: Role[] = [
     stack: ['Databricks', 'Unity Catalog', 'Data governance', 'Data quality', 'Metadata', 'Technical documentation', 'YAML', 'JSON Schema', 'Python', 'GitHub Actions', 'MkDocs', 'Cursor', 'GitHub Copilot', 'Claude', 'Databricks Genie', 'MCP', 'Scrum', 'Azure DevOps', 'Stakeholder communication'],
     role: 'Data Analyst',
     highlights: [
-      'Help run a docs-as-code metadata platform: data products are described in version-controlled YAML, validated in CI, and published to Databricks, a federated data product registry and Talk-to-Data agents.',
+      'Help run a docs-as-code metadata platform: data products are described in version-controlled YAML, validated in CI, and published to Databricks, the UCL (Unified Consumption Layer) federated registry and Talk-to-Data agents.',
       'Co-designed and delivered the first pillar data products of a marketing analytics product family, and tested one end to end against an AI agent: 4 of 4 golden queries passed (average score 4.57 of 5).',
       'Onboarded six teams to the semantic layer, covering the metadata model, the PR-based workflow, the expert-review quality gate and the deployment chain.',
       'Set up repository governance with native GitHub controls (CODEOWNERS, rulesets), issue forms, PR templates and live docs previews; 37 pull requests merged and 19 code reviews.',
       'Rebuilt the consumer core data asset wiki and data catalog to a 13-section standard, and acted as scrum master and project coordinator for the asset team.',
+      'In a Talk-to-Data pilot, turned marketing business questions into SQL, compared AI assistants, and built Databricks Genie spaces enriched with validated metadata.',
+      'Wrote design proposals for an Agent Skills hub and a Semantic Quality Framework, and decision records on access control, data product structure and schema evolution.',
       'Work AI-assisted with Cursor, GitHub Copilot, Claude and Databricks Genie: AI drafts, I frame, review, validate and decide.',
-      'Presented the data platform and semantic layer at two internal events.',
+      'Promoted enterprise-wide adoption of UCL with talks at two internal events, and wrote its federated registry capability card and quick-start guide.',
     ],
   },
   {

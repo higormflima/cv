@@ -49,12 +49,12 @@ export const missions: Mission[] = [
   },
   {
     id: 'adoption',
-    name: 'Data platform adoption squad',
+    name: 'UCL adoption squad',
     period: 'Oct 2026 – present',
     start: '2026-10',
     end: null,
     roles: ['Contributor', 'Technical writer', 'Front-end contributor'],
-    delivered: 'Wrote the federated registry capability card and quick-start guide, and rebuilt the capability roadmap as a filterable release timeline.',
+    delivered: 'Promoted enterprise-wide adoption of UCL (Unified Consumption Layer): wrote the UCL federated registry capability card and quick-start guide, and rebuilt the capability roadmap as a filterable release timeline.',
   },
 ];
 
@@ -240,6 +240,6 @@ export const bayerTimeline = [
 ];
 
 export const talks = [
-  { title: 'Promoting the company data platform', event: 'Internal technology conference', date: 'October 2026' },
-  { title: 'The data platform and the semantic layer engine', event: 'Internal company event', date: 'November 2026' },
+  { title: 'Driving enterprise adoption of UCL (Unified Consumption Layer)', event: 'Internal technology conference', date: 'October 2026' },
+  { title: 'UCL adoption and the semantic layer engine', event: 'Internal company event', date: 'November 2026' },
 ];
