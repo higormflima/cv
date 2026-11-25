@@ -45,6 +45,6 @@ Astro writes the static site to `dist/`. The GitHub Actions workflow in `.github
 - The Story page narrative is in `src/data/story.ts`.
 - The PDF CV is generated from the same data via `src/pages/resume.astro`. The Markdown CV at `public/documents/higor-lima-cv.md` is maintained by hand; keep it aligned with the structured site data.
 - The repository owner and Pages URL are configured in `astro.config.mjs`.
-- The optimized portrait is in `public/images/profile/`. Keep the original photo separately when replacing it.
+- The optimized portrait is in `public/images/profile/`. It is generated from `assets/originals/higor-lima-original.webp` by `python scripts/enhance-portrait.py` (deterministic adjustments only: background darkening, temperature, skin tone, highlight roll-off, fill light, contrast and sharpening; requires Pillow and NumPy). Add `--compare out.png` to write a before/after image.
 
 All site copy and project documentation are written in English. Personal and professional details currently shown are based on the supplied CV.
