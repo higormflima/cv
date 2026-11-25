@@ -3,7 +3,7 @@ export const education = [
     institution: 'São Paulo State University (UNESP) — “Júlio de Mesquita Filho”',
     qualification: 'Mechanical Engineering',
     dates: '2010 – 2018',
-    short: 'UNESP · Mechanical Engineering',
+    short: 'Mechanical Engineering - UNESP',
     start: '2010-01',
     end: '2018-12',
   },

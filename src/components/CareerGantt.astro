@@ -118,8 +118,8 @@ const moveX = (toYears(relocation.date) / span).toFixed(4);
   .gantt-legend li { display: inline-flex; align-items: center; gap: .4rem; }
   .gantt-legend li::before { width: .7rem; height: .45rem; border-radius: 2px; background: var(--track-color); content: ''; }
   .gantt-scroll { overflow-x: auto; padding-bottom: .5rem; }
-  .gantt-body { --label: 13rem; --track: calc(100% - var(--label)); position: relative; min-width: 760px; padding-block: 4rem 1.5rem; }
-  .gantt-compact .gantt-body { --label: 11.5rem; }
+  .gantt-body { --label: 15rem; --track: calc(100% - var(--label)); position: relative; min-width: 800px; padding-block: 4rem 1.5rem; }
+  .gantt-compact .gantt-body { --label: 14.5rem; }
   .gantt-region { position: absolute; top: 1.35rem; bottom: 1.5rem; left: calc(var(--label) + var(--track) * var(--x0)); width: calc(var(--track) * (var(--x1) - var(--x0))); border-top: 2px solid var(--region); border-radius: 6px 6px 0 0; background: linear-gradient(180deg, color-mix(in srgb, var(--region) 12%, transparent), color-mix(in srgb, var(--region) 3%, transparent) 40%); pointer-events: none; }
   .region-from { --region: #1fb85a; }
   .region-to { --region: #ef3b5d; }
