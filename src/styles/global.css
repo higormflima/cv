@@ -120,6 +120,7 @@ kbd { display: inline-grid; min-width: 1.5rem; place-items: center; padding: .1r
 [data-track='engineering'] { --track-color: var(--track-engineering); }
 [data-track='military'] { --track-color: var(--track-military); }
 [data-track='education'] { --track-color: var(--track-education); }
+[data-track='personal'] { --track-color: var(--track-personal); }
 
 .education-section { max-width: 920px; margin-top: 5rem; }
 .education-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }

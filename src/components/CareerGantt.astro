@@ -1,6 +1,9 @@
 ---
 import { experience, shortRole, trackLabels, type Track } from '../data/experience';
 import { education } from '../data/education';
+import { personalProjects } from '../data/personalProjects';
+import { relocation } from '../data/relocation';
+import Flag from './Flag.astro';
 import { base } from '../lib/paths';
 
 interface Props {
@@ -21,7 +24,7 @@ const toYears = (ym: string | null) => {
 };
 const pct = (value: number) => `${((value / span) * 100).toFixed(3)}%`;
 
-type Row = { id: string; label: string; sub: string; dates: string; track: Track | 'education'; start: number; end: number; current: boolean };
+type Row = { id: string; label: string; sub: string; dates: string; track: Track | 'education' | 'personal'; start: number; end: number; current: boolean; href?: string };
 const rows: Row[] = [
   ...experience.map((role) => ({
     id: role.id,
@@ -43,10 +46,26 @@ const rows: Row[] = [
     end: toYears(item.end) + 1 / 12,
     current: false,
   })),
+  ...personalProjects.map((project) => ({
+    id: project.id,
+    label: project.name,
+    sub: project.summary,
+    dates: project.dates,
+    track: 'personal' as const,
+    start: toYears(project.start),
+    end: toYears(project.end),
+    current: false,
+    href: `${base}${project.href}`,
+  })),
 ].sort((a, b) => a.start - b.start);
 
 const ticks = Array.from({ length: Math.floor(span / 2) + 1 }, (_, i) => startYear + i * 2);
-const legend = [...(Object.keys(trackLabels) as Track[]).map((key) => ({ key, label: trackLabels[key] })), { key: 'education', label: 'Education' }];
+const legend = [
+  ...(Object.keys(trackLabels) as Track[]).map((key) => ({ key, label: trackLabels[key] })),
+  { key: 'personal', label: 'Personal project' },
+  { key: 'education', label: 'Education' },
+];
+const moveX = (toYears(relocation.date) / span).toFixed(4);
 ---
 
 <figure class:list={['gantt', { 'gantt-compact': compact }]} data-reveal>
@@ -58,6 +77,15 @@ const legend = [...(Object.keys(trackLabels) as Track[]).map((key) => ({ key, la
   </figcaption>
   <div class="gantt-scroll">
     <div class="gantt-body" style={`--span:${span}`}>
+      <div class="gantt-region region-from" style={`--x0:0;--x1:${moveX}`} aria-hidden="true">
+        <span class="region-label"><Flag code={relocation.from.code} /> {relocation.from.name}</span>
+      </div>
+      <div class="gantt-region region-to" style={`--x0:${moveX};--x1:1`} aria-hidden="true">
+        <span class="region-label"><Flag code={relocation.to.code} /> {relocation.to.name}</span>
+      </div>
+      <div class="gantt-event" style={`--x:${moveX}`} role="note">
+        <span class="event-chip"><span class="event-title"><span aria-hidden="true">✈ </span>{relocation.label}</span><span class="event-note">{relocation.note}</span></span>
+      </div>
       <div class="gantt-axis" aria-hidden="true">
         {ticks.map((year) => <span style={`left:${pct(year - startYear)}`}>{year}</span>)}
       </div>
@@ -68,7 +96,7 @@ const legend = [...(Object.keys(trackLabels) as Track[]).map((key) => ({ key, la
             <span class="gantt-lane">
               <a
                 class:list={['gantt-bar', { 'is-current': row.current }]}
-                href={`${linkPrefix}#${row.id}`}
+                href={row.href ?? `${linkPrefix}#${row.id}`}
                 style={`left:${pct(row.start)};width:${pct(Math.max(row.end - row.start, 0.25))};--i:${index}`}
                 aria-label={`${row.label}: ${row.sub}, ${row.dates}`}
               >
@@ -90,8 +118,18 @@ const legend = [...(Object.keys(trackLabels) as Track[]).map((key) => ({ key, la
   .gantt-legend li { display: inline-flex; align-items: center; gap: .4rem; }
   .gantt-legend li::before { width: .7rem; height: .45rem; border-radius: 2px; background: var(--track-color); content: ''; }
   .gantt-scroll { overflow-x: auto; padding-bottom: .5rem; }
-  .gantt-body { --label: 13rem; position: relative; min-width: 760px; padding-block: 1.6rem 1.5rem; }
+  .gantt-body { --label: 13rem; --track: calc(100% - var(--label)); position: relative; min-width: 760px; padding-block: 4rem 1.5rem; }
   .gantt-compact .gantt-body { --label: 11.5rem; }
+  .gantt-region { position: absolute; top: 1.35rem; bottom: 1.5rem; left: calc(var(--label) + var(--track) * var(--x0)); width: calc(var(--track) * (var(--x1) - var(--x0))); border-top: 2px solid var(--region); border-radius: 6px 6px 0 0; background: linear-gradient(180deg, color-mix(in srgb, var(--region) 12%, transparent), color-mix(in srgb, var(--region) 3%, transparent) 40%); pointer-events: none; }
+  .region-from { --region: #1fb85a; }
+  .region-to { --region: #ef3b5d; }
+  .region-label { position: absolute; top: .45rem; display: inline-flex; align-items: center; gap: .4rem; color: var(--text-soft); font-family: var(--mono); font-size: .7rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .region-from .region-label { left: .6rem; }
+  .region-to .region-label { right: .6rem; }
+  .gantt-event { position: absolute; z-index: 2; top: 1.35rem; bottom: 1.5rem; left: calc(var(--label) + var(--track) * var(--x)); width: 0; border-left: 2px dashed var(--text-soft); pointer-events: none; }
+  .event-chip { position: absolute; top: .3rem; left: 0; display: grid; padding: .3rem .55rem; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg-elev); box-shadow: var(--shadow); font-family: var(--mono); line-height: 1.35; white-space: nowrap; transform: translateX(-50%); }
+  .event-title { color: var(--text); font-size: .68rem; font-weight: 600; }
+  .event-note { color: var(--text-mute); font-size: .6rem; }
   .gantt-axis { position: absolute; top: 0; right: 0; bottom: 0; left: var(--label); pointer-events: none; }
   .gantt-axis span { position: absolute; top: 0; bottom: 0; padding-left: .3rem; border-left: 1px dashed var(--line); color: var(--text-mute); font-family: var(--mono); font-size: .66rem; }
   .gantt-rows { position: relative; display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; }

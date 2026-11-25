@@ -1,0 +1,28 @@
+---
+interface Props {
+  code: 'br' | 'pl';
+  size?: number;
+}
+
+const { code, size = 14 } = Astro.props;
+const height = Math.round(size * 0.7);
+---
+
+<svg class="flag" width={size} height={height} viewBox="0 0 20 14" aria-hidden="true">
+  {code === 'br' ? (
+    <>
+      <rect width="20" height="14" fill="#009c3b" />
+      <path d="M10 1.6 18.2 7 10 12.4 1.8 7z" fill="#ffdf00" />
+      <circle cx="10" cy="7" r="3.1" fill="#002776" />
+    </>
+  ) : (
+    <>
+      <rect width="20" height="7" fill="#fff" />
+      <rect y="7" width="20" height="7" fill="#dc143c" />
+    </>
+  )}
+</svg>
+
+<style>
+  .flag { display: inline-block; flex: 0 0 auto; border-radius: 2px; box-shadow: 0 0 0 1px rgb(0 0 0 / 25%); vertical-align: -1px; }
+</style>

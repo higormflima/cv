@@ -1,6 +1,8 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { storyIntro, storyStages } from '../data/story';
+import { relocation } from '../data/relocation';
+import Flag from '../components/Flag.astro';
 import { base } from '../lib/paths';
 ---
 
@@ -12,6 +14,16 @@ import { base } from '../lib/paths';
 
     <ol class="pipeline">
       {storyStages.map((stage, index) => (
+        <>
+        {stage.step === 'validate' && (
+          <li class="relocation" data-reveal role="note">
+            <div class="stage-node relocation-node" aria-hidden="true">✈</div>
+            <div class="relocation-body">
+              <span class="relocation-flags"><Flag code={relocation.from.code} size={20} /><span aria-hidden="true">→</span><Flag code={relocation.to.code} size={20} /></span>
+              <span class="relocation-text"><strong>{relocation.label}</strong><span>{relocation.note}</span></span>
+            </div>
+          </li>
+        )}
         <li class="stage" data-reveal style={`--reveal-delay:${index * 80}ms`}>
           <div class="stage-node mono" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>
           <article class="stage-card card card-glow">
@@ -23,6 +35,7 @@ import { base } from '../lib/paths';
             </ul>
           </article>
         </li>
+        </>
       ))}
     </ol>
 
@@ -43,6 +56,13 @@ import { base } from '../lib/paths';
   .pipeline::after { position: absolute; top: 0; left: calc(1.4rem - 3px); width: 8px; height: 8px; border-radius: 50%; background: var(--accent-fill); box-shadow: 0 0 14px var(--accent-fill); content: ''; animation: flow 6s linear infinite; }
   @keyframes flow { from { top: 1rem; } to { top: calc(100% - 1rem); } }
   .stage { position: relative; display: grid; grid-template-columns: 2.8rem 1fr; gap: 1.25rem; align-items: start; }
+  .relocation { position: relative; display: grid; grid-template-columns: 2.8rem 1fr; gap: 1.25rem; align-items: center; margin-block: .5rem; }
+  .relocation-node { border-style: dashed; color: var(--text); font-size: 1rem; }
+  .relocation-body { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; padding: .8rem 1.1rem; border: 1px dashed var(--line-strong); border-radius: var(--radius); background: linear-gradient(90deg, color-mix(in srgb, #1fb85a 12%, transparent), color-mix(in srgb, #ef3b5d 12%, transparent)); }
+  .relocation-flags { display: inline-flex; align-items: center; gap: .5rem; color: var(--text-mute); }
+  .relocation-text { display: grid; font-family: var(--mono); line-height: 1.4; }
+  .relocation-text strong { font-size: .85rem; }
+  .relocation-text span { color: var(--text-soft); font-size: .74rem; }
   .stage-node { position: relative; z-index: 1; display: grid; width: 2.8rem; height: 2.8rem; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; background: var(--bg-elev); color: var(--accent); font-size: .75rem; }
   .stage-card { padding: 1.4rem 1.5rem; }
   .stage-card .stage-step { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .5rem; color: var(--accent); font-size: .76rem; }
@@ -52,5 +72,5 @@ import { base } from '../lib/paths';
   .stage-carry { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
   .story-output { max-width: 900px; margin-top: 2.5rem; padding: clamp(1.5rem, 4vw, 2.5rem); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
   .story-output-text { max-width: 640px; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 650; letter-spacing: -.03em; line-height: 1.2; }
-  @media (max-width: 520px) { .stage { grid-template-columns: 1fr; } .stage-node, .pipeline::before, .pipeline::after { display: none; } }
+  @media (max-width: 520px) { .stage, .relocation { grid-template-columns: 1fr; } .stage-node, .pipeline::before, .pipeline::after { display: none; } }
 </style>
